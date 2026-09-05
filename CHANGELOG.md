@@ -10,3 +10,10 @@
 ## [0.1.0] - 2026-09-05
 ### Added
 - Initial location and CRM features.
+
+## [1.0.0-beta] - 2026-09-05
+### Added
+- Phase 10: Marketing, Automation, and AI Engine.
+- Async Celery task architecture for Automation Rules.
+- Modular AIGeneratorService.
+- Coupon and Promotional models.
