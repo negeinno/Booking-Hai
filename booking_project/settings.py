@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     'payments',
     'subscriptions',
     'notifications',
+    'reviews',
+    'favorites',
 ]
 
 # Auth settings

@@ -39,6 +39,11 @@ class Business(models.Model):
     # Timezone (can be business-wide or per-location, kept here for simplicity)
     timezone = models.CharField(max_length=50, default='UTC')
     
+    # Trust & Reputation
+    is_verified = models.BooleanField(default=False)
+    average_rating = models.DecimalField(max_digits=3, decimal_places=2, default=0.00)
+    total_reviews = models.PositiveIntegerField(default=0)
+    
     # Metadata
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='active')
     created_at = models.DateTimeField(auto_now_add=True)
