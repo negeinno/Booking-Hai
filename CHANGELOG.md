@@ -1,4 +1,4 @@
-# Changelog
+# Changelog\n\n## [1.0.0] - 2026-09-05\n### Added\n- Docker & Docker Compose configurations for production.\n- Enterprise-ready repository architecture (CODEOWNERS, Dependabot).\n- Extensive Developer Documentation (/docs).\n- Official v1.0.0 Production Release.
 
 ## [0.9.0] - 2026-09-05
 ### Added

@@ -1,5 +1,10 @@
 # Booking Hai
 
+![Build Status](https://img.shields.io/github/actions/workflow/status/BookingHai/booking_hai/django.yml?branch=main)
+![Python Version](https://img.shields.io/badge/python-3.10-blue.svg)
+![License](https://img.shields.io/badge/license-MIT-green.svg)
+![Release](https://img.shields.io/badge/release-v1.0.0-blue)
+
 > Create your booking page. Accept appointments effortlessly.
 
 Booking Hai is a premium, highly-scalable SaaS platform allowing business owners (salons, clinics, professionals) to instantly create location-aware booking pages, manage staff, handle multi-branch operations, and accept appointments.
