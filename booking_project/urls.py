@@ -14,6 +14,7 @@ urlpatterns = [
     path('locations/', include('locations.urls')),
     path('discover/', include('locations.urls_discover')),
     path('appointments/', include('appointments.urls')),
+    path('dashboard/', include('dashboard.urls')),
 ]
 
 if settings.DEBUG:

@@ -1,0 +1,199 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Dashboard - {{ business.name }}{% endblock %}
+
+{% block extra_head %}
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+    .dashboard-sidebar { min-height: calc(100vh - 70px); border-right: 1px solid #eaeaea; }
+    .stat-card { transition: transform 0.2s; }
+    .stat-card:hover { transform: translateY(-3px); }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-2 d-none d-md-block bg-white dashboard-sidebar pt-4">
+            <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted text-uppercase fw-bold small">
+                <span>Core</span>
+            </h6>
+            <ul class="nav flex-column mb-4">
+                <li class="nav-item">
+                    <a class="nav-link fw-medium text-primary bg-primary bg-opacity-10 rounded-3 mx-2 px-3 py-2" href="#">
+                        <i class="bi bi-house-door me-2"></i> Overview
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link fw-medium text-dark rounded-3 mx-2 px-3 py-2" href="#">
+                        <i class="bi bi-calendar3 me-2"></i> Calendar
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link fw-medium text-dark rounded-3 mx-2 px-3 py-2" href="#">
+                        <i class="bi bi-people me-2"></i> CRM
+                    </a>
+                </li>
+            </ul>
+
+            <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted text-uppercase fw-bold small">
+                <span>Management</span>
+            </h6>
+            <ul class="nav flex-column mb-2">
+                <li class="nav-item">
+                    <a class="nav-link fw-medium text-dark rounded-3 mx-2 px-3 py-2" href="{% url 'services:list' %}">
+                        <i class="bi bi-box-seam me-2"></i> Services
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link fw-medium text-dark rounded-3 mx-2 px-3 py-2" href="{% url 'staff:list' %}">
+                        <i class="bi bi-person-badge me-2"></i> Staff
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link fw-medium text-dark rounded-3 mx-2 px-3 py-2" href="#">
+                        <i class="bi bi-graph-up me-2"></i> Reports
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <main class="col-md-10 ms-sm-auto px-md-4 pt-4 pb-5 bg-light">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-4 border-bottom border-secondary border-opacity-10">
+                <div>
+                    <h1 class="h2 fw-bold text-dark mb-0">Dashboard</h1>
+                    <p class="text-muted mb-0">Welcome back to {{ business.name }}</p>
+                </div>
+                <div class="btn-toolbar mb-2 mb-md-0">
+                    <div class="btn-group me-2">
+                        <button type="button" class="btn btn-sm btn-outline-primary fw-medium px-3">Share Link</button>
+                        <a href="{% url 'businesses:public_page' business.slug %}" class="btn btn-sm btn-outline-secondary fw-medium px-3" target="_blank">View Public Page</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Stats -->
+            <div class="row g-4 mb-4">
+                <div class="col-md-3">
+                    <div class="card border-0 shadow-sm rounded-4 p-4 stat-card h-100 bg-white">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <div class="text-muted fw-bold small text-uppercase">Today's Appts</div>
+                            <i class="bi bi-calendar-event text-primary fs-5"></i>
+                        </div>
+                        <h2 class="fw-bold mb-0 text-dark">{{ metrics.today_total }}</h2>
+                        <span class="badge bg-warning-subtle text-warning mt-2">{{ metrics.pending_approval }} Pending</span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card border-0 shadow-sm rounded-4 p-4 stat-card h-100 bg-white">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <div class="text-muted fw-bold small text-uppercase">Revenue</div>
+                            <i class="bi bi-currency-dollar text-success fs-5"></i>
+                        </div>
+                        <h2 class="fw-bold mb-0 text-dark">$0.00</h2>
+                        <span class="text-muted small mt-2">Transactions via Cash</span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card border-0 shadow-sm rounded-4 p-4 stat-card h-100 bg-white">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <div class="text-muted fw-bold small text-uppercase">New Customers</div>
+                            <i class="bi bi-person-plus text-info fs-5"></i>
+                        </div>
+                        <h2 class="fw-bold mb-0 text-dark">{{ crm_metrics.new_customers }}</h2>
+                        <a href="#" class="text-decoration-none small mt-2 d-inline-block">View CRM &rarr;</a>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card border-0 shadow-sm rounded-4 p-4 stat-card h-100 bg-white">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <div class="text-muted fw-bold small text-uppercase">Status</div>
+                            <i class="bi bi-activity text-secondary fs-5"></i>
+                        </div>
+                        <h2 class="fw-bold mb-0 text-dark">{{ business.get_status_display }}</h2>
+                        <span class="badge bg-success-subtle text-success mt-2">Accepting Bookings</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts & Activity -->
+            <div class="row g-4">
+                <!-- Chart -->
+                <div class="col-lg-8">
+                    <div class="card border-0 shadow-sm rounded-4 p-4 h-100">
+                        <h6 class="fw-bold mb-4">Weekly Appointments</h6>
+                        <canvas id="appointmentsChart" height="100"></canvas>
+                    </div>
+                </div>
+                
+                <!-- Activity Feed -->
+                <div class="col-lg-4">
+                    <div class="card border-0 shadow-sm rounded-4 p-4 h-100">
+                        <h6 class="fw-bold mb-4">Recent Activity</h6>
+                        <div class="activity-feed">
+                            {% for activity in activities %}
+                            <div class="d-flex mb-3 pb-3 border-bottom">
+                                <div class="bg-light rounded-circle p-2 me-3 text-primary d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                    <i class="bi bi-bell"></i>
+                                </div>
+                                <div>
+                                    <p class="mb-0 small fw-medium text-dark">{{ activity.description }}</p>
+                                    <span class="text-muted" style="font-size: 0.75rem;">{{ activity.timestamp|timesince }} ago</span>
+                                </div>
+                            </div>
+                            {% empty %}
+                            <div class="text-center text-muted py-4">
+                                <i class="bi bi-inbox fs-2 opacity-50 mb-2"></i>
+                                <p class="small mb-0">No recent activity</p>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const ctx = document.getElementById('appointmentsChart').getContext('2d');
+    
+    // Parse the data safely
+    const rawData = {{ weekly_data|safe }};
+    const labels = rawData.map(d => d.day);
+    const dataPoints = rawData.map(d => d.count);
+    
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Appointments',
+                data: dataPoints,
+                backgroundColor: 'rgba(13, 110, 253, 0.15)',
+                borderColor: 'rgba(13, 110, 253, 1)',
+                borderWidth: 2,
+                borderRadius: 4
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { display: false }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: { precision: 0 }
+                }
+            }
+        }
+    });
+});
+</script>
+{% endblock %}

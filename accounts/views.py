@@ -28,8 +28,9 @@ def dashboard_redirect(request):
     if request.user.profile.is_business_owner:
         if not request.user.businesses.exists():
             return redirect('businesses:setup')
-        return redirect('accounts:business_dashboard')
-    return redirect('accounts:customer_dashboard')
+        return redirect('dashboard:home')
+    else:
+        return redirect('customer_dashboard')
 
 @login_required
 def customer_dashboard(request):
