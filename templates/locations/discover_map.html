@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% block title %}Map View - Booking Hai{% endblock %}
+
+{% block extra_head %}
+<!-- Leaflet CSS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<style>
+    #map { height: 600px; width: 100%; border-radius: 1rem; z-index: 1; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-4 py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Map View</h2>
+        <div>
+            <a href="{% url 'discover:grid' %}" class="btn btn-outline-secondary fw-medium me-2"><i class="bi bi-grid me-1"></i> Grid</a>
+            <a href="{% url 'discover:map' %}" class="btn btn-primary fw-medium"><i class="bi bi-map-fill me-1"></i> Map</a>
+        </div>
+    </div>
+    
+    <div class="row g-4">
+        <!-- Sidebar filters -->
+        <div class="col-lg-3">
+            <div class="card border-0 shadow-sm rounded-4 p-4 h-100">
+                <h5 class="fw-bold mb-4">Filters</h5>
+                <form method="get">
+                    <div class="mb-3">
+                        <label class="form-label text-muted small fw-bold">Search</label>
+                        <input type="text" name="q" class="form-control bg-light border-0" value="{{ query }}">
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label text-muted small fw-bold">City</label>
+                        <input type="text" name="loc" class="form-control bg-light border-0" value="{{ location_query }}">
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100 fw-bold">Apply Filters</button>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Map Container -->
+        <div class="col-lg-9">
+            <div class="card border-0 shadow-sm rounded-4 p-2">
+                <div id="map"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Initialize Map
+        var map = L.map('map').setView([20.5937, 78.9629], 5); // Default to India center
+        
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '© OpenStreetMap'
+        }).addTo(map);
+
+        var locations = {{ locations_json|safe }};
+        var bounds = [];
+        
+        locations.forEach(function(loc) {
+            var marker = L.marker([loc.lat, loc.lng]).addTo(map);
+            bounds.push([loc.lat, loc.lng]);
+            
+            var popupContent = `
+                <div class="text-center p-2">
+                    <h6 class="fw-bold mb-1">${loc.name}</h6>
+                    <p class="text-muted small mb-2">${loc.branch} - ${loc.city}</p>
+                    <a href="${loc.url}" class="btn btn-sm btn-primary w-100">View & Book</a>
+                </div>
+            `;
+            marker.bindPopup(popupContent);
+        });
+        
+        if (bounds.length > 0) {
+            map.fitBounds(bounds, {padding: [50, 50]});
+        }
+    });
+</script>
+{% endblock %}

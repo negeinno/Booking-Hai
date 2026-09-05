@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Dashboard - Booking Hai{% endblock %}
+
+{% block content %}
+<div class="container section-padding py-5">
+    <div class="row mb-5 align-items-center">
+        <div class="col-md-8">
+            <h2 class="fw-bold mb-1">{{ business.name }} Dashboard</h2>
+            <p class="text-muted mb-0">Welcome back, {{ user.first_name }}. Here is what's happening today.</p>
+        </div>
+        <div class="col-md-4 text-md-end mt-3 mt-md-0">
+            <a href="{% url 'businesses:public_page' business.slug %}" class="btn btn-outline-primary fw-bold px-4" target="_blank">
+                <i class="bi bi-box-arrow-up-right me-2"></i> View Public Page
+            </a>
+        </div>
+    </div>
+
+    <!-- Stats Row -->
+    <div class="row g-4 mb-5">
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm rounded-4 p-4 h-100 bg-primary text-white">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h6 class="mb-0 fw-medium">Total Services</h6>
+                    <i class="bi bi-box-seam fs-4 opacity-75"></i>
+                </div>
+                <h2 class="fw-bold mb-0">{{ business.services.count }}</h2>
+                <a href="{% url 'services:list' %}" class="text-white text-decoration-none small mt-3 d-inline-block">Manage Services &rarr;</a>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm rounded-4 p-4 h-100 bg-dark text-white">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h6 class="mb-0 fw-medium">Staff Members</h6>
+                    <i class="bi bi-people fs-4 opacity-75"></i>
+                </div>
+                <h2 class="fw-bold mb-0">{{ business.staff_members.count }}</h2>
+                <a href="{% url 'staff:list' %}" class="text-white text-decoration-none small mt-3 d-inline-block">Manage Staff &rarr;</a>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm rounded-4 p-4 h-100 bg-white">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h6 class="mb-0 fw-medium text-muted">Business Status</h6>
+                    <i class="bi bi-building fs-4 text-primary opacity-75"></i>
+                </div>
+                <h2 class="fw-bold mb-2 text-dark">{{ business.get_status_display }}</h2>
+                <span class="badge {% if business.status == 'active' %}bg-success-subtle text-success{% else %}bg-secondary-subtle text-secondary{% endif %} rounded-pill px-3 py-2 fw-medium">
+                    {% if business.status == 'active' %}Accepting Bookings{% else %}Closed{% endif %}
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- Upcoming Appointments -->
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm rounded-4 p-4 h-100">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h5 class="fw-bold mb-0">Today's Appointments</h5>
+                    <a href="#" class="btn btn-sm btn-outline-secondary">View Calendar</a>
+                </div>
+                
+                <div class="list-group list-group-flush">
+                    <div class="list-group-item px-0 py-3 d-flex justify-content-between align-items-center border-bottom">
+                        <div class="d-flex align-items-center">
+                            <div class="rounded-circle bg-light d-flex align-items-center justify-content-center me-3 text-primary fw-bold" style="width: 45px; height: 45px;">10</div>
+                            <div>
+                                <h6 class="fw-bold mb-1">Alex Johnson</h6>
+                                <p class="text-muted small mb-0">Premium Haircut</p>
+                            </div>
+                        </div>
+                        <div class="text-end">
+                            <div class="fw-bold small mb-1">10:00 AM</div>
+                            <span class="badge bg-warning-subtle text-warning">Pending</span>
+                        </div>
+                    </div>
+                    
+                    <div class="list-group-item px-0 py-3 d-flex justify-content-between align-items-center border-bottom">
+                        <div class="d-flex align-items-center">
+                            <div class="rounded-circle bg-light d-flex align-items-center justify-content-center me-3 text-primary fw-bold" style="width: 45px; height: 45px;">12</div>
+                            <div>
+                                <h6 class="fw-bold mb-1">Sarah Smith</h6>
+                                <p class="text-muted small mb-0">Color & Style</p>
+                            </div>
+                        </div>
+                        <div class="text-end">
+                            <div class="fw-bold small mb-1">12:30 PM</div>
+                            <span class="badge bg-success-subtle text-success">Confirmed</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Quick Actions -->
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm rounded-4 p-4 h-100">
+                <h5 class="fw-bold mb-4">Quick Actions</h5>
+                
+                <div class="d-grid gap-3">
+                    <a href="#" class="btn btn-light text-start p-3 fw-medium border shadow-sm">
+                        <i class="bi bi-shop me-2 text-primary"></i> Edit Business Profile
+                    </a>
+                    <a href="{% url 'services:list' %}" class="btn btn-light text-start p-3 fw-medium border shadow-sm">
+                        <i class="bi bi-list-check me-2 text-primary"></i> Manage Services
+                    </a>
+                    <a href="{% url 'staff:list' %}" class="btn btn-light text-start p-3 fw-medium border shadow-sm">
+                        <i class="bi bi-people me-2 text-primary"></i> Manage Staff
+                    </a>
+                    <a href="#" class="btn btn-light text-start p-3 fw-medium border shadow-sm">
+                        <i class="bi bi-clock-history me-2 text-primary"></i> Update Working Hours
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

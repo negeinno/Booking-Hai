@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Manage Staff - Booking Hai{% endblock %}
+
+{% block content %}
+<div class="container section-padding py-5">
+    <div class="d-flex justify-content-between align-items-center mb-5">
+        <div>
+            <h2 class="fw-bold mb-1">Staff Members</h2>
+            <p class="text-muted mb-0">Manage your team and assign them to services.</p>
+        </div>
+        <div>
+            <a href="{% url 'staff:create' %}" class="btn btn-primary fw-bold px-4">
+                <i class="bi bi-person-plus me-2"></i> Add Staff
+            </a>
+        </div>
+    </div>
+
+    {% if staff_members %}
+    <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th scope="col" class="text-muted fw-medium py-3 ps-4">Team Member</th>
+                        <th scope="col" class="text-muted fw-medium py-3">Contact</th>
+                        <th scope="col" class="text-muted fw-medium py-3">Assigned Services</th>
+                        <th scope="col" class="text-muted fw-medium py-3">Status</th>
+                        <th scope="col" class="text-muted fw-medium py-3 text-end pe-4">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for s in staff_members %}
+                    <tr>
+                        <td class="ps-4 py-3 d-flex align-items-center">
+                            {% if s.profile_photo %}
+                                <img src="{{ s.profile_photo.url }}" class="rounded-circle object-fit-cover me-3" width="48" height="48" alt="{{ s.name }}">
+                            {% else %}
+                                <div class="rounded-circle bg-light d-flex align-items-center justify-content-center me-3 fw-bold text-secondary" style="width: 48px; height: 48px;">
+                                    {{ s.name|first|upper }}
+                                </div>
+                            {% endif %}
+                            <div>
+                                <h6 class="fw-bold mb-1">{{ s.name }}</h6>
+                                <p class="text-muted small mb-0">{{ s.position|default:"Staff Member" }}</p>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="text-muted small">
+                                {% if s.email %}<i class="bi bi-envelope me-1"></i> {{ s.email }}<br>{% endif %}
+                                {% if s.phone %}<i class="bi bi-telephone me-1"></i> {{ s.phone }}{% endif %}
+                            </div>
+                        </td>
+                        <td>
+                            <span class="badge bg-light text-dark">{{ s.services.count }} services</span>
+                        </td>
+                        <td>
+                            {% if s.is_active %}
+                                <span class="badge bg-success-subtle text-success rounded-pill px-3 py-2">Active</span>
+                            {% else %}
+                                <span class="badge bg-secondary-subtle text-secondary rounded-pill px-3 py-2">Inactive</span>
+                            {% endif %}
+                        </td>
+                        <td class="text-end pe-4">
+                            <div class="dropdown">
+                                <button class="btn btn-light btn-sm border" type="button" data-bs-toggle="dropdown">
+                                    <i class="bi bi-three-dots"></i>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0 rounded-3">
+                                    <li><a class="dropdown-item" href="{% url 'staff:update' s.pk %}"><i class="bi bi-pencil me-2 text-muted"></i> Edit</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item text-danger" href="{% url 'staff:delete' s.pk %}"><i class="bi bi-trash me-2"></i> Delete</a></li>
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% else %}
+    <div class="card border-0 shadow-sm rounded-4 p-5 text-center">
+        <i class="bi bi-people fs-1 text-primary mb-3 opacity-50"></i>
+        <h4 class="fw-bold">No team members yet</h4>
+        <p class="text-muted mb-4">Add your staff to assign them to services and let customers book them.</p>
+        <div>
+            <a href="{% url 'staff:create' %}" class="btn btn-outline-primary fw-medium px-4">Add First Member</a>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

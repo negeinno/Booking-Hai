@@ -1,0 +1,178 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ business.name }} - Booking Hai{% endblock %}
+
+{% block content %}
+<!-- Cover Image Section -->
+<div class="position-relative bg-light" style="height: 300px; border-bottom: 1px solid var(--border-color);">
+    {% if business.cover_image %}
+        <img src="{{ business.cover_image.url }}" class="w-100 h-100 object-fit-cover" alt="{{ business.name }} cover">
+    {% else %}
+        <div class="w-100 h-100 bg-secondary d-flex align-items-center justify-content-center">
+            <i class="bi bi-shop text-muted" style="font-size: 5rem; opacity: 0.2;"></i>
+        </div>
+    {% endif %}
+    
+    <!-- Logo overlay -->
+    <div class="container position-relative">
+        <div class="position-absolute" style="bottom: -50px; left: 1rem;">
+            {% if business.logo %}
+                <img src="{{ business.logo.url }}" class="rounded-4 shadow bg-white object-fit-cover border" width="120" height="120" alt="{{ business.name }} logo">
+            {% else %}
+                <div class="rounded-4 shadow bg-primary text-white d-flex align-items-center justify-content-center fw-bold fs-1 border border-white border-4" style="width: 120px; height: 120px;">
+                    {{ business.name|first|upper }}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<div class="container section-padding" style="margin-top: 60px;">
+    <div class="row">
+        <!-- Main Content -->
+        <div class="col-lg-8 pe-lg-5 mb-5 mb-lg-0">
+            <div class="d-flex align-items-center mb-2">
+                <h1 class="fw-bold mb-0 me-3">{{ business.name }}</h1>
+                <span class="badge bg-primary-subtle text-primary">{{ business.category.name }}</span>
+            </div>
+            <p class="text-muted fs-5 mb-4">{{ business.short_description }}</p>
+            
+            <div class="card border-0 bg-light rounded-4 p-4 mb-5 shadow-sm">
+                <h5 class="fw-bold mb-3">About Us</h5>
+                <p class="mb-0 text-muted lh-lg">
+                    {{ business.about|default:"Welcome to our business! We look forward to serving you."|linebreaksbr }}
+                </p>
+            </div>
+            
+            <h4 class="fw-bold mb-4">Our Services</h4>
+            {% if business.services.all %}
+                <div class="row g-4 mb-5">
+                {% for service in business.services.all %}
+                    {% if service.is_active %}
+                    <div class="col-md-6">
+                        <div class="card border-0 shadow-sm rounded-4 h-100 p-4">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <div>
+                                    <h5 class="fw-bold mb-1">{{ service.name }}</h5>
+                                    <span class="badge bg-light text-dark mb-2">{{ service.duration }} mins</span>
+                                </div>
+                                <div class="fs-5 fw-bold text-primary">${{ service.price }}</div>
+                            </div>
+                            <p class="text-muted small mb-4 flex-grow-1">{{ service.short_description }}</p>
+                            <button class="btn btn-outline-primary fw-medium w-100" disabled>Book Now</button>
+                        </div>
+                    </div>
+                    {% endif %}
+                {% endfor %}
+                </div>
+            {% else %}
+                <div class="card border-0 shadow-sm rounded-4 p-5 text-center text-muted border border-dashed mb-5">
+                    <i class="bi bi-calendar2-x fs-1 mb-3 text-secondary"></i>
+                    <h5>No services available yet</h5>
+                    <p class="mb-0">Please check back later.</p>
+                </div>
+            {% endif %}
+
+            <h4 class="fw-bold mb-4">Our Team</h4>
+            {% if business.staff_members.all %}
+                <div class="row g-4">
+                {% for staff in business.staff_members.all %}
+                    {% if staff.is_active %}
+                    <div class="col-md-6">
+                        <div class="d-flex align-items-center p-3 rounded-4 bg-light">
+                            {% if staff.profile_photo %}
+                                <img src="{{ staff.profile_photo.url }}" class="rounded-circle object-fit-cover me-3" width="60" height="60" alt="{{ staff.name }}">
+                            {% else %}
+                                <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center me-3 fw-bold" style="width: 60px; height: 60px;">
+                                    {{ staff.name|first|upper }}
+                                </div>
+                            {% endif %}
+                            <div>
+                                <h6 class="fw-bold mb-0">{{ staff.name }}</h6>
+                                <p class="text-muted small mb-0">{{ staff.position }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                {% endfor %}
+                </div>
+            {% else %}
+                <p class="text-muted">No staff members listed yet.</p>
+            {% endif %}
+        </div>
+        
+        <!-- Sidebar -->
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-lg rounded-4 p-4 sticky-top" style="top: 100px;">
+                <button class="btn btn-primary btn-lg w-100 fw-bold shadow-sm mb-4" disabled>Book Appointment</button>
+                
+                <h6 class="fw-bold mb-3 text-uppercase small text-muted">Business Status</h6>
+                <div class="mb-4">
+                    {% if business.status == 'active' %}
+                        <span class="badge bg-success">Active & Accepting Bookings</span>
+                    {% else %}
+                        <span class="badge bg-secondary">Temporarily Closed</span>
+                    {% endif %}
+                </div>
+
+                <h6 class="fw-bold mb-3 text-uppercase small text-muted">Working Hours</h6>
+                <ul class="list-unstyled mb-4 text-muted small">
+                    {% for day in business.working_days.all %}
+                    <li class="d-flex justify-content-between mb-2 pb-2 border-bottom border-light">
+                        <span class="fw-medium">{{ day.get_day_of_week_display }}</span>
+                        {% if day.is_closed %}
+                            <span class="text-danger">Closed</span>
+                        {% else %}
+                            <span>{{ day.open_time|time:"g:i A" }} - {{ day.close_time|time:"g:i A" }}</span>
+                        {% endif %}
+                    </li>
+                    {% endfor %}
+                </ul>                
+                <h6 class="fw-bold mb-3 text-uppercase small text-muted">Contact Info</h6>
+                <ul class="list-unstyled mb-4">
+                    {% if business.address_line or business.city %}
+                    <li class="d-flex mb-3">
+                        <i class="bi bi-geo-alt text-primary me-3 fs-5"></i>
+                        <span class="text-muted">
+                            {{ business.address_line }}<br>
+                            {{ business.city }}, {{ business.state }} {{ business.country }}
+                        </span>
+                    </li>
+                    {% endif %}
+                    
+                    {% if business.phone %}
+                    <li class="d-flex mb-3 align-items-center">
+                        <i class="bi bi-telephone text-primary me-3 fs-5"></i>
+                        <span class="text-muted">{{ business.phone }}</span>
+                    </li>
+                    {% endif %}
+                    
+                    {% if business.email %}
+                    <li class="d-flex mb-3 align-items-center">
+                        <i class="bi bi-envelope text-primary me-3 fs-5"></i>
+                        <span class="text-muted">{{ business.email }}</span>
+                    </li>
+                    {% endif %}
+                    
+                    {% if business.website %}
+                    <li class="d-flex align-items-center">
+                        <i class="bi bi-globe text-primary me-3 fs-5"></i>
+                        <a href="{{ business.website }}" target="_blank" class="text-decoration-none text-muted">{{ business.website }}</a>
+                    </li>
+                    {% endif %}
+                </ul>
+                
+                <div class="d-flex gap-2">
+                    <button class="btn btn-light flex-fill fw-medium border shadow-sm">
+                        <i class="bi bi-share me-2"></i> Share
+                    </button>
+                    <button class="btn btn-light flex-fill fw-medium border shadow-sm text-danger">
+                        <i class="bi bi-flag me-2"></i> Report
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

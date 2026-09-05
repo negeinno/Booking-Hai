@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Profile - Booking Hai{% endblock %}
+
+{% block content %}
+<div class="container section-padding py-5">
+    <div class="row">
+        <div class="col-lg-3 mb-4">
+            <!-- Sidebar -->
+            <div class="list-group list-group-flush rounded-4 shadow-sm border overflow-hidden sticky-top" style="top: 100px;">
+                <a href="{% url 'accounts:dashboard' %}" class="list-group-item list-group-item-action py-3 fw-medium">
+                    <i class="bi bi-grid me-2"></i> Dashboard
+                </a>
+                <a href="{% url 'accounts:profile' %}" class="list-group-item list-group-item-action py-3 fw-medium active">
+                    <i class="bi bi-person me-2"></i> Profile
+                </a>
+                <a href="{% url 'password_change' %}" class="list-group-item list-group-item-action py-3 fw-medium">
+                    <i class="bi bi-shield-lock me-2"></i> Security
+                </a>
+            </div>
+        </div>
+        
+        <div class="col-lg-9">
+            <!-- Profile Content -->
+            <div class="card border-0 shadow-sm rounded-4 p-4 p-md-5 mb-4">
+                <div class="d-flex align-items-center mb-4 pb-4 border-bottom">
+                    {% if user.profile.profile_picture %}
+                        <img src="{{ user.profile.profile_picture.url }}" alt="Profile Picture" class="rounded-circle me-4 object-fit-cover" width="80" height="80">
+                    {% else %}
+                        <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center me-4 fs-3 fw-bold" style="width: 80px; height: 80px;">
+                            {{ user.first_name|first|upper }}
+                        </div>
+                    {% endif %}
+                    <div>
+                        <h4 class="fw-bold mb-1">{{ user.first_name }} {{ user.last_name }}</h4>
+                        <p class="text-muted mb-0">
+                            {{ user.email }} • <span class="badge bg-secondary text-capitalize">{{ user.profile.role|replace:"_owner"|default:user.profile.role }}</span>
+                        </p>
+                    </div>
+                </div>
+
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} rounded-md">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    <h5 class="fw-bold mb-4">Personal Information</h5>
+                    
+                    <div class="row g-4 mb-5">
+                        <div class="col-md-6">
+                            <label class="form-label fw-medium">First Name</label>
+                            <input type="text" name="{{ u_form.first_name.name }}" class="form-control form-control-lg bg-light border-0" value="{{ u_form.first_name.value|default:'' }}">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-medium">Last Name</label>
+                            <input type="text" name="{{ u_form.last_name.name }}" class="form-control form-control-lg bg-light border-0" value="{{ u_form.last_name.value|default:'' }}">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-medium">Email Address</label>
+                            <input type="email" name="{{ u_form.email.name }}" class="form-control form-control-lg bg-light border-0" value="{{ u_form.email.value|default:'' }}">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-medium">Phone Number</label>
+                            <input type="text" name="{{ p_form.phone_number.name }}" class="form-control form-control-lg bg-light border-0" value="{{ p_form.phone_number.value|default:'' }}">
+                        </div>
+                    </div>
+
+                    <h5 class="fw-bold mb-4">Location & Bio</h5>
+                    
+                    <div class="row g-4 mb-4">
+                        <div class="col-md-4">
+                            <label class="form-label fw-medium">City</label>
+                            <input type="text" name="{{ p_form.city.name }}" class="form-control form-control-lg bg-light border-0" value="{{ p_form.city.value|default:'' }}">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label fw-medium">State</label>
+                            <input type="text" name="{{ p_form.state.name }}" class="form-control form-control-lg bg-light border-0" value="{{ p_form.state.value|default:'' }}">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label fw-medium">Country</label>
+                            <input type="text" name="{{ p_form.country.name }}" class="form-control form-control-lg bg-light border-0" value="{{ p_form.country.value|default:'' }}">
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label fw-medium">Bio</label>
+                            <textarea name="{{ p_form.bio.name }}" rows="4" class="form-control form-control-lg bg-light border-0">{{ p_form.bio.value|default:'' }}</textarea>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label fw-medium">Profile Picture</label>
+                            <input type="file" name="{{ p_form.profile_picture.name }}" class="form-control form-control-lg bg-light border-0">
+                        </div>
+                    </div>
+                    
+                    <!-- Include any hidden fields or errors just in case -->
+                    <div class="d-none">
+                        {{ u_form.as_p }}
+                        {{ p_form.as_p }}
+                    </div>
+
+                    <div class="d-flex justify-content-end mt-4 pt-4 border-top">
+                        <button type="submit" class="btn btn-primary px-4 py-2 fw-bold">Save Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

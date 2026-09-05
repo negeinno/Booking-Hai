@@ -1,0 +1,229 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Setup Workspace - Booking Hai{% endblock %}
+
+{% block extra_head %}
+<style>
+    .wizard-step { display: none; }
+    .wizard-step.active { display: block; }
+    
+    .step-indicator {
+        width: 2.5rem;
+        height: 2.5rem;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        background-color: var(--bg-secondary);
+        color: var(--text-muted);
+        border: 2px solid var(--border-color);
+        transition: all 0.3s;
+    }
+    
+    .step-indicator.active {
+        background-color: var(--primary-color);
+        color: white;
+        border-color: var(--primary-color);
+    }
+    
+    .step-indicator.completed {
+        background-color: var(--accent-color);
+        color: white;
+        border-color: var(--accent-color);
+    }
+    
+    .step-line {
+        flex-grow: 1;
+        height: 2px;
+        background-color: var(--border-color);
+        margin: 0 1rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container section-padding py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="text-center mb-5">
+                <h2 class="fw-bold mb-2">Create your workspace</h2>
+                <p class="text-muted">Let's get your business online in just a few steps.</p>
+            </div>
+            
+            <!-- Progress Tracker -->
+            <div class="d-flex align-items-center mb-5 px-md-5">
+                <div class="step-indicator active" id="indicator-1">1</div>
+                <div class="step-line"></div>
+                <div class="step-indicator" id="indicator-2">2</div>
+                <div class="step-line"></div>
+                <div class="step-indicator" id="indicator-3">3</div>
+            </div>
+
+            <div class="card border-0 shadow-lg rounded-4 p-4 p-md-5">
+                <form method="post" enctype="multipart/form-data" id="onboarding-form">
+                    {% csrf_token %}
+                    
+                    <!-- Form Errors (if any on post) -->
+                    {% if basic_form.errors or contact_form.errors or branding_form.errors %}
+                    <div class="alert alert-danger rounded-md mb-4">
+                        Please correct the errors in the form below.
+                    </div>
+                    {% endif %}
+                    
+                    <!-- STEP 1: Basic Details -->
+                    <div class="wizard-step active" id="step-1">
+                        <h4 class="fw-bold mb-4">Basic Details</h4>
+                        <div class="row g-4">
+                            <div class="col-md-12">
+                                <label for="{{ basic_form.name.id_for_label }}" class="form-label fw-medium">Business Name <span class="text-danger">*</span></label>
+                                <input type="text" name="{{ basic_form.name.name }}" class="form-control form-control-lg bg-light border-0 {% if basic_form.name.errors %}is-invalid{% endif %}" id="{{ basic_form.name.id_for_label }}" value="{{ basic_form.name.value|default:'' }}" required>
+                                {% if basic_form.name.errors %}<div class="invalid-feedback">{{ basic_form.name.errors.0 }}</div>{% endif %}
+                            </div>
+                            
+                            <div class="col-md-12">
+                                <label for="{{ basic_form.category.id_for_label }}" class="form-label fw-medium">Category <span class="text-danger">*</span></label>
+                                <select name="{{ basic_form.category.name }}" class="form-select form-select-lg bg-light border-0 {% if basic_form.category.errors %}is-invalid{% endif %}" id="{{ basic_form.category.id_for_label }}" required>
+                                    <option value="" disabled {% if not basic_form.category.value %}selected{% endif %}>Select a category</option>
+                                    {% for choice in basic_form.category.field.queryset %}
+                                        <option value="{{ choice.pk }}" {% if basic_form.category.value == choice.pk|stringformat:"s" %}selected{% endif %}>{{ choice.name }}</option>
+                                    {% endfor %}
+                                </select>
+                                {% if basic_form.category.errors %}<div class="invalid-feedback">{{ basic_form.category.errors.0 }}</div>{% endif %}
+                            </div>
+                            
+                            <div class="col-md-12">
+                                <label for="{{ basic_form.short_description.id_for_label }}" class="form-label fw-medium">Short Description <span class="text-danger">*</span></label>
+                                <input type="text" name="{{ basic_form.short_description.name }}" class="form-control form-control-lg bg-light border-0 {% if basic_form.short_description.errors %}is-invalid{% endif %}" id="{{ basic_form.short_description.id_for_label }}" placeholder="e.g. Premium Hair Salon in Downtown" value="{{ basic_form.short_description.value|default:'' }}" required>
+                                <div class="form-text text-muted small mt-1">A one-line description that appears on search and preview cards.</div>
+                                {% if basic_form.short_description.errors %}<div class="invalid-feedback">{{ basic_form.short_description.errors.0 }}</div>{% endif %}
+                            </div>
+                            
+                            <div class="col-md-12">
+                                <label for="{{ basic_form.about.id_for_label }}" class="form-label fw-medium">About (Optional)</label>
+                                <textarea name="{{ basic_form.about.name }}" class="form-control form-control-lg bg-light border-0 {% if basic_form.about.errors %}is-invalid{% endif %}" id="{{ basic_form.about.id_for_label }}" rows="4" placeholder="Tell customers about your services and expertise...">{{ basic_form.about.value|default:'' }}</textarea>
+                                {% if basic_form.about.errors %}<div class="invalid-feedback">{{ basic_form.about.errors.0 }}</div>{% endif %}
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-end mt-5">
+                            <button type="button" class="btn btn-primary btn-lg px-5 fw-bold" onclick="nextStep(2)">Continue</button>
+                        </div>
+                    </div>
+                    
+                    <!-- STEP 2: Contact Details -->
+                    <div class="wizard-step" id="step-2">
+                        <h4 class="fw-bold mb-4">Contact & Location</h4>
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <label class="form-label fw-medium">Business Phone</label>
+                                <input type="text" name="{{ contact_form.phone.name }}" class="form-control form-control-lg bg-light border-0" value="{{ contact_form.phone.value|default:'' }}">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-medium">Business Email</label>
+                                <input type="email" name="{{ contact_form.email.name }}" class="form-control form-control-lg bg-light border-0" value="{{ contact_form.email.value|default:'' }}">
+                            </div>
+                            <div class="col-md-12">
+                                <label class="form-label fw-medium">Website</label>
+                                <input type="url" name="{{ contact_form.website.name }}" class="form-control form-control-lg bg-light border-0" value="{{ contact_form.website.value|default:'' }}" placeholder="https://">
+                            </div>
+                            
+                            <div class="col-12 mt-4 pt-4 border-top">
+                                <h5 class="fw-bold mb-3">Address</h5>
+                            </div>
+                            
+                            <div class="col-md-12">
+                                <label class="form-label fw-medium">Address Line</label>
+                                <input type="text" name="{{ contact_form.address_line.name }}" class="form-control form-control-lg bg-light border-0" value="{{ contact_form.address_line.value|default:'' }}">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label fw-medium">City</label>
+                                <input type="text" name="{{ contact_form.city.name }}" class="form-control form-control-lg bg-light border-0" value="{{ contact_form.city.value|default:'' }}">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label fw-medium">State/Province</label>
+                                <input type="text" name="{{ contact_form.state.name }}" class="form-control form-control-lg bg-light border-0" value="{{ contact_form.state.value|default:'' }}">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label fw-medium">Country</label>
+                                <input type="text" name="{{ contact_form.country.name }}" class="form-control form-control-lg bg-light border-0" value="{{ contact_form.country.value|default:'' }}">
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-between mt-5">
+                            <button type="button" class="btn btn-outline-secondary btn-lg px-4 fw-medium" onclick="prevStep(1)">Back</button>
+                            <button type="button" class="btn btn-primary btn-lg px-5 fw-bold" onclick="nextStep(3)">Continue</button>
+                        </div>
+                    </div>
+                    
+                    <!-- STEP 3: Branding -->
+                    <div class="wizard-step" id="step-3">
+                        <h4 class="fw-bold mb-4">Branding</h4>
+                        <div class="row g-4">
+                            <div class="col-md-12">
+                                <label class="form-label fw-medium">Business Logo</label>
+                                <div class="card bg-light border-0 text-center p-5 rounded-4 mb-2 border border-dashed">
+                                    <i class="bi bi-cloud-arrow-up fs-1 text-primary mb-2"></i>
+                                    <input type="file" name="{{ branding_form.logo.name }}" class="form-control form-control-sm mt-3 w-75 mx-auto">
+                                </div>
+                                <div class="form-text text-muted small mt-1">Recommended size: 500x500px (1:1 ratio).</div>
+                            </div>
+                            
+                            <div class="col-md-12 mt-4">
+                                <label class="form-label fw-medium">Cover Image</label>
+                                <div class="card bg-light border-0 text-center p-5 rounded-4 mb-2 border border-dashed">
+                                    <i class="bi bi-image fs-1 text-primary mb-2"></i>
+                                    <input type="file" name="{{ branding_form.cover_image.name }}" class="form-control form-control-sm mt-3 w-75 mx-auto">
+                                </div>
+                                <div class="form-text text-muted small mt-1">Recommended size: 1200x400px (3:1 ratio). This appears at the top of your public page.</div>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-between mt-5">
+                            <button type="button" class="btn btn-outline-secondary btn-lg px-4 fw-medium" onclick="prevStep(2)">Back</button>
+                            <button type="submit" class="btn btn-primary btn-lg px-5 fw-bold">Create Workspace</button>
+                        </div>
+                    </div>
+                    
+                    <div class="d-none">
+                        {{ contact_form.postal_code }}
+                        {{ contact_form.timezone }}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block extra_scripts %}
+<script>
+    function nextStep(step) {
+        // Basic frontend validation for Step 1
+        if(step === 2) {
+            let nameInput = document.getElementById('{{ basic_form.name.id_for_label }}');
+            let catInput = document.getElementById('{{ basic_form.category.id_for_label }}');
+            if(!nameInput.value || !catInput.value) {
+                alert('Please fill out the required fields (Name and Category) before continuing.');
+                return;
+            }
+        }
+        
+        document.querySelectorAll('.wizard-step').forEach(el => el.classList.remove('active'));
+        document.getElementById('step-' + step).classList.add('active');
+        
+        // Update indicators
+        document.getElementById('indicator-' + (step-1)).classList.remove('active');
+        document.getElementById('indicator-' + (step-1)).classList.add('completed');
+        document.getElementById('indicator-' + step).classList.add('active');
+    }
+    
+    function prevStep(step) {
+        document.querySelectorAll('.wizard-step').forEach(el => el.classList.remove('active'));
+        document.getElementById('step-' + step).classList.add('active');
+        
+        // Update indicators
+        document.getElementById('indicator-' + (step+1)).classList.remove('active');
+        document.getElementById('indicator-' + step).classList.remove('completed');
+        document.getElementById('indicator-' + step).classList.add('active');
+    }
+</script>
+{% endblock %}
+{% endblock %}

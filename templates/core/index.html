@@ -1,0 +1,172 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<!-- Hero Section -->
+    <section class="hero-section py-5 my-5">
+        <div class="container text-center">
+            <h1 class="display-4 fw-bold mb-3 text-dark">Find and book local services instantly</h1>
+            <p class="lead text-muted mb-5">Discover the best salons, clinics, and professionals near you.</p>
+            
+            <div class="card border-0 shadow-lg rounded-5 p-2 mx-auto" style="max-width: 800px;">
+                <form action="{% url 'discover:grid' %}" method="get" class="row g-2 align-items-center p-2">
+                    <div class="col-md-5">
+                        <div class="input-group input-group-lg border-0">
+                            <span class="input-group-text bg-white border-0 text-muted ps-3"><i class="bi bi-search"></i></span>
+                            <input type="text" name="q" class="form-control border-0 shadow-none fs-6" placeholder="What are you looking for?" value="{{ request.GET.q }}">
+                        </div>
+                    </div>
+                    <div class="col-md-5 border-start">
+                        <div class="input-group input-group-lg border-0">
+                            <span class="input-group-text bg-white border-0 text-muted ps-3"><i class="bi bi-geo-alt"></i></span>
+                            <input type="text" name="loc" id="locationInput" class="form-control border-0 shadow-none fs-6" placeholder="City or location" value="{{ request.GET.loc }}">
+                            <button type="button" class="btn bg-white border-0 text-primary" id="useLocationBtn" title="Use my current location">
+                                <i class="bi bi-crosshair"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-md-2 d-grid">
+                        <button type="submit" class="btn btn-primary btn-lg rounded-4 fw-bold shadow-sm">Search</button>
+                    </div>
+                </form>
+            </div>
+            
+            <div class="mt-4 text-muted small">
+                <span class="fw-medium">Popular:</span> 
+                <a href="{% url 'discover:grid' %}?q=Salon" class="text-decoration-none mx-2 text-secondary">Hair Salon</a>
+                <a href="{% url 'discover:grid' %}?q=Spa" class="text-decoration-none mx-2 text-secondary">Spa & Massage</a>
+                <a href="{% url 'discover:grid' %}?q=Doctor" class="text-decoration-none mx-2 text-secondary">Doctor Clinic</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Location Permission Script -->
+    <script>
+        document.getElementById('useLocationBtn').addEventListener('click', function() {
+            if (navigator.geolocation) {
+                const btn = this;
+                btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>';
+                
+                navigator.geolocation.getCurrentPosition(
+                    function(position) {
+                        // Normally you'd reverse geocode this. For now we set coordinates to hidden inputs if we had them.
+                        // Since this is a simple text input, let's just indicate location found.
+                        document.getElementById('locationInput').value = "My Location";
+                        btn.innerHTML = '<i class="bi bi-crosshair"></i>';
+                    },
+                    function(error) {
+                        console.error("Error obtaining location", error);
+                        btn.innerHTML = '<i class="bi bi-crosshair"></i>';
+                        alert("Could not access location. Please enter your city manually.");
+                    }
+                );
+            } else {
+                alert("Geolocation is not supported by this browser.");
+            }
+        });
+    </script>
+
+<!-- Features Section -->
+<section id="features" class="section-padding bg-secondary">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="section-title">Everything you need to grow</h2>
+            <p class="section-subtitle">Powerful features hidden behind a simple, intuitive interface.</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="bi bi-calendar2-check"></i></div>
+                    <h4>Smart Scheduling</h4>
+                    <p class="text-muted mb-0">Clients only see your available times. Double-bookings are a thing of the past.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="bi bi-brush"></i></div>
+                    <h4>Customizable Pages</h4>
+                    <p class="text-muted mb-0">Upload your logo, set your brand colors, and make the booking page truly yours.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="bi bi-bell"></i></div>
+                    <h4>Automated Reminders</h4>
+                    <p class="text-muted mb-0">Reduce no-shows with automated email and SMS reminders for your clients.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- How it Works -->
+<section id="how-it-works" class="section-padding">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 mb-5 mb-lg-0">
+                <h2 class="section-title">Three steps to effortless bookings</h2>
+                <div class="d-flex mb-4 mt-5">
+                    <div class="me-4">
+                        <span class="badge bg-primary rounded-circle p-3 d-flex align-items-center justify-content-center" style="width: 3rem; height: 3rem; font-size: 1.25rem;">1</span>
+                    </div>
+                    <div>
+                        <h5>Create your profile</h5>
+                        <p class="text-muted">Add your services, pricing, and working hours in an easy-to-use dashboard.</p>
+                    </div>
+                </div>
+                <div class="d-flex mb-4">
+                    <div class="me-4">
+                        <span class="badge bg-primary rounded-circle p-3 d-flex align-items-center justify-content-center" style="width: 3rem; height: 3rem; font-size: 1.25rem;">2</span>
+                    </div>
+                    <div>
+                        <h5>Share your link</h5>
+                        <p class="text-muted">Put your Booking Hai link on your Instagram, website, or send it directly to clients.</p>
+                    </div>
+                </div>
+                <div class="d-flex">
+                    <div class="me-4">
+                        <span class="badge bg-primary rounded-circle p-3 d-flex align-items-center justify-content-center" style="width: 3rem; height: 3rem; font-size: 1.25rem;">3</span>
+                    </div>
+                    <div>
+                        <h5>Watch bookings roll in</h5>
+                        <p class="text-muted">Clients book themselves 24/7. You get notified instantly.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-5 offset-lg-1">
+                <!-- A placeholder for an app dashboard screenshot -->
+                <div class="rounded-4 bg-light border p-3 shadow-lg" style="height: 400px;">
+                    <div class="d-flex align-items-center gap-2 mb-3 border-bottom pb-3">
+                        <div class="rounded-circle bg-danger" style="width: 12px; height: 12px;"></div>
+                        <div class="rounded-circle bg-warning" style="width: 12px; height: 12px;"></div>
+                        <div class="rounded-circle bg-success" style="width: 12px; height: 12px;"></div>
+                    </div>
+                    <div class="h-100 d-flex flex-column gap-3">
+                        <div class="bg-white rounded p-3 border shadow-sm w-75">
+                            <div class="small fw-bold mb-1">New Booking: Haircut</div>
+                            <div class="text-muted small">Tomorrow at 10:00 AM</div>
+                        </div>
+                        <div class="bg-white rounded p-3 border shadow-sm w-75 ms-auto">
+                            <div class="small fw-bold mb-1">New Booking: Color Setup</div>
+                            <div class="text-muted small">Tomorrow at 1:00 PM</div>
+                        </div>
+                        <div class="bg-white rounded p-3 border shadow-sm w-75">
+                            <div class="small fw-bold mb-1">New Booking: Consultation</div>
+                            <div class="text-muted small">Friday at 11:30 AM</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="section-padding bg-primary text-white text-center">
+    <div class="container">
+        <h2 class="mb-4 text-white">Ready to streamline your business?</h2>
+        <p class="mb-5 text-white-50 fs-5 max-w-2xl mx-auto">Join thousands of professionals who have upgraded their booking experience.</p>
+        <a href="#" class="btn btn-light btn-lg px-5 py-3 fw-bold text-primary">Get Started for Free</a>
+    </div>
+</section>
+{% endblock %}
