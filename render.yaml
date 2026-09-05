@@ -1,0 +1,27 @@
+databases:
+  - name: booking_hai_db
+    plan: free
+    databaseName: booking_hai
+    user: booking_user
+
+services:
+  - type: web
+    name: booking_hai_web
+    env: python
+    buildCommand: "./build.sh"
+    startCommand: "gunicorn booking_project.wsgi:application"
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.10.11
+      - key: DJANGO_SETTINGS_MODULE
+        value: booking_project.settings
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        fromDatabase:
+          name: booking_hai_db
+          property: connectionString
+      - key: DEBUG
+        value: "False"
+      - key: ALLOWED_HOSTS
+        value: ".onrender.com"
