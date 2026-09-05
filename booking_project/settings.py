@@ -40,6 +40,9 @@ INSTALLED_APPS = [
     'locations',
     'appointments',
     'dashboard',
+    'payments',
+    'subscriptions',
+    'notifications',
 ]
 
 # Auth settings
