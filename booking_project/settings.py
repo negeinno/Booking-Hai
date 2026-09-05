@@ -45,6 +45,9 @@ INSTALLED_APPS = [
     'notifications',
     'reviews',
     'favorites',
+    'marketing',
+    'automation',
+    'ai_assistant',
 ]
 
 # Auth settings
