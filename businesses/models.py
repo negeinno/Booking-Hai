@@ -27,9 +27,15 @@ class Business(models.Model):
     short_description = models.CharField(max_length=255)
     about = models.TextField(blank=True)
     
+    # Domains (Multi-Tenant Architecture)
+    subdomain = models.CharField(max_length=100, unique=True, blank=True, null=True, help_text="e.g. abc for abc.bookinghai.in")
+    custom_domain = models.CharField(max_length=255, unique=True, blank=True, null=True, help_text="e.g. www.abc.com")
+    
     # Branding
     logo = models.ImageField(upload_to='businesses/logos/', blank=True, null=True)
     cover_image = models.ImageField(upload_to='businesses/covers/', blank=True, null=True)
+    brand_color = models.CharField(max_length=7, default='#000000', help_text="Hex color code")
+    social_media_links = models.JSONField(default=dict, blank=True, help_text="Store links like {'facebook': '...', 'instagram': '...'}")
     
     # Contact Details
     phone = models.CharField(max_length=20, blank=True)
@@ -38,6 +44,11 @@ class Business(models.Model):
     
     # Timezone (can be business-wide or per-location, kept here for simplicity)
     timezone = models.CharField(max_length=50, default='UTC')
+    
+    # Trust & Reputation
+    is_verified = models.BooleanField(default=False)
+    average_rating = models.DecimalField(max_digits=3, decimal_places=2, default=0.00)
+    total_reviews = models.PositiveIntegerField(default=0)
     
     # Metadata
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='active')
@@ -58,6 +69,17 @@ class BusinessSettings(models.Model):
     min_notice_time = models.PositiveIntegerField(default=24, help_text="Minimum hours notice required for new bookings")
     currency = models.CharField(max_length=10, default='USD')
     language = models.CharField(max_length=20, default='en')
+    
+    # Policies and Rules
+    cancellation_policy = models.TextField(blank=True, help_text="Cancellation policy details")
+    booking_rules = models.TextField(blank=True, help_text="General rules for booking")
+    
+    # Notification Preferences
+    email_notifications_enabled = models.BooleanField(default=True)
+    sms_notifications_enabled = models.BooleanField(default=False)
+    whatsapp_notifications_enabled = models.BooleanField(default=False)
+    push_notifications_enabled = models.BooleanField(default=False)
+    notification_preferences = models.JSONField(default=dict, blank=True, help_text="Detailed notification settings")
 
     def __str__(self):
         return f"{self.business.name} Settings"

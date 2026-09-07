@@ -33,12 +33,49 @@
                     </div>
                     <div class="mb-4">
                         <label class="form-label text-muted small fw-bold">City</label>
-                        <input type="text" name="loc" class="form-control bg-light border-0" value="{{ location_query }}">
+                        <div class="input-group">
+                            <input type="text" name="loc" id="locationInput" class="form-control bg-light border-0 shadow-none" value="{{ location_query }}">
+                            <button type="button" class="btn bg-light border-0 text-primary" id="useLocationBtn" title="Use my current location">
+                                <i class="bi bi-crosshair"></i>
+                            </button>
+                        </div>
                     </div>
                     <button type="submit" class="btn btn-primary w-100 fw-bold">Apply Filters</button>
                 </form>
             </div>
         </div>
+        
+        <script>
+            document.getElementById('useLocationBtn')?.addEventListener('click', function() {
+                if (navigator.geolocation) {
+                    const btn = this;
+                    btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>';
+                    
+                    navigator.geolocation.getCurrentPosition(
+                        function(position) {
+                            const lat = position.coords.latitude;
+                            const lon = position.coords.longitude;
+                            
+                            fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`)
+                                .then(response => response.json())
+                                .then(data => {
+                                    let city = data.address.city || data.address.town || data.address.village || data.address.county || "";
+                                    document.getElementById('locationInput').value = city;
+                                    btn.innerHTML = '<i class="bi bi-crosshair"></i>';
+                                })
+                                .catch(error => {
+                                    document.getElementById('locationInput').value = "Mumbai"; 
+                                    btn.innerHTML = '<i class="bi bi-crosshair"></i>';
+                                });
+                        },
+                        function(error) {
+                            btn.innerHTML = '<i class="bi bi-crosshair"></i>';
+                            alert("Could not access location.");
+                        }
+                    );
+                }
+            });
+        </script>
         
         <!-- Map Container -->
         <div class="col-lg-9">

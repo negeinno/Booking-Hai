@@ -14,15 +14,53 @@
     <div class="card border-0 shadow-sm rounded-4 p-3 mb-5">
         <form method="get" class="row g-2">
             <div class="col-md-5">
-                <input type="text" name="q" class="form-control form-control-lg border-light bg-light" placeholder="Service or Business Name" value="{{ query }}">
+                <input type="text" name="q" class="form-control form-control-lg border-light bg-light shadow-none" placeholder="Service or Business Name" value="{{ query }}">
             </div>
             <div class="col-md-5">
-                <input type="text" name="loc" class="form-control form-control-lg border-light bg-light" placeholder="City or Location" value="{{ location_query }}">
+                <div class="input-group input-group-lg border-light bg-light rounded-3 overflow-hidden">
+                    <input type="text" name="loc" id="locationInput" class="form-control bg-light border-0 shadow-none" placeholder="City or Location" value="{{ location_query }}">
+                    <button type="button" class="btn bg-light border-0 text-primary px-3" id="useLocationBtn" title="Use my current location">
+                        <i class="bi bi-crosshair"></i>
+                    </button>
+                </div>
             </div>
             <div class="col-md-2">
-                <button type="submit" class="btn btn-primary btn-lg w-100 fw-bold">Search</button>
+                <button type="submit" class="btn btn-primary btn-lg w-100 fw-bold shadow-sm">Search</button>
             </div>
         </form>
+    </div>
+
+    <script>
+        document.getElementById('useLocationBtn')?.addEventListener('click', function() {
+            if (navigator.geolocation) {
+                const btn = this;
+                btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>';
+                
+                navigator.geolocation.getCurrentPosition(
+                    function(position) {
+                        const lat = position.coords.latitude;
+                        const lon = position.coords.longitude;
+                        
+                        fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`)
+                            .then(response => response.json())
+                            .then(data => {
+                                let city = data.address.city || data.address.town || data.address.village || data.address.county || "";
+                                document.getElementById('locationInput').value = city;
+                                btn.innerHTML = '<i class="bi bi-crosshair"></i>';
+                            })
+                            .catch(error => {
+                                document.getElementById('locationInput').value = "Mumbai"; 
+                                btn.innerHTML = '<i class="bi bi-crosshair"></i>';
+                            });
+                    },
+                    function(error) {
+                        btn.innerHTML = '<i class="bi bi-crosshair"></i>';
+                        alert("Could not access location.");
+                    }
+                );
+            }
+        });
+    </script>
     </div>
 
     <!-- Results Grid -->

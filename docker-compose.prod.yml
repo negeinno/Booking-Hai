@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  web:
+    command: gunicorn -c gunicorn.conf.py booking_project.wsgi:application
+    volumes:
+      - static_volume:/app/staticfiles
+      - media_volume:/app/media
+    environment:
+      - DEBUG=False
+    restart: always
+
+  celery:
+    command: celery -A booking_project worker -l INFO --concurrency=4
+    restart: always
+    environment:
+      - DEBUG=False
+
+  celery-beat:
+    build: .
+    command: celery -A booking_project beat -l INFO
+    depends_on:
+      - redis
+    restart: always
+    environment:
+      - DEBUG=False
+
+  redis:
+    restart: always
+
+volumes:
+  static_volume:
+  media_volume:

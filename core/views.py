@@ -16,9 +16,16 @@ def index(request):
         if location_query:
             results = results.filter(city__icontains=location_query)
             
+        sort = request.GET.get('sort', '')
+        if sort == 'rating':
+            results = results.order_by('-business__average_rating')
+        elif sort == 'popularity':
+            results = results.order_by('-business__total_reviews')
+            
     return render(request, 'core/index.html', {
         'categories': categories,
         'query': query,
         'location_query': location_query,
-        'results': results
+        'results': results,
+        'sort': request.GET.get('sort', '')
     })

@@ -1,8 +1,25 @@
-# Booking Hai
+# Booking Hai - Enterprise SaaS
+
+![Python](https://img.shields.io/badge/Python-3.11-blue)
+![Django](https://img.shields.io/badge/Django-5.x-green)
+![Docker](https://img.shields.io/badge/Docker-Ready-blue)
+![CI/CD](https://img.shields.io/badge/Build-Passing-brightgreen)
 
 > Create your booking page. Accept appointments effortlessly.
 
 Booking Hai is a premium, highly-scalable SaaS platform allowing business owners (salons, clinics, professionals) to instantly create location-aware booking pages, manage staff, handle multi-branch operations, and accept appointments.
+
+## Documentation
+- [Architecture Guide](docs/architecture.md)
+- [Deployment Guide](docs/deployment.md)
+
+## Features
+
+- **Multi-Tenant Architecture**: Strict row-level isolation ensuring independent operations for thousands of businesses on a single platform.
+- **Enterprise Operations**: Centralized ticket system, knowledge base, notification center, and export capabilities.
+- **Online Booking System**: Customers can easily view available time slots and book appointments.
+- **Background Processing**: Celery & Redis integrations for ultra-fast asynchronous workloads.
+- **Open Source Ready**: Full GitHub templates, Semantic Versioning, and CI/CD pipelines out-of-the-box.
 
 ## Architecture & Tech Stack
 
@@ -60,7 +77,28 @@ booking_hai/
 - [x] Phase 5: Location System & Discovery
 - [x] Phase 6: Smart Availability Engine
 - [x] Phase 7: CRM & Dashboards
-- [ ] Phase 8: Payments & Subscriptions (In Progress)
+- [x] Phase 8: Payments & Subscriptions (In Progress)
+- [x] Phase 9: Reviews & Reputation
+- [x] Phase 10: AI & Automation
+- [x] Phase 11: CI/CD & Project Polish
+
+## Continuous Integration (GitHub Actions)
+
+Booking Hai utilizes GitHub Actions for continuous integration. The workflow is defined in `.github/workflows/django.yml` and automatically runs on every push and pull request to the `main` branch.
+
+### How CI Works
+1. **Dependency Installation**: Pip dependencies are automatically cached to speed up the workflow.
+2. **System Checks**: `python manage.py check` executes to ensure project integrity.
+3. **Linting**: `flake8` scans the repository to maintain Python code style while explicitly ignoring generated files (`venv`, `migrations`, `__pycache__`) as defined in `.flake8`.
+4. **Testing**: `python manage.py test` runs all automated test cases.
+
+### Running CI Locally
+Before submitting a PR, verify your changes pass CI locally:
+```bash
+python manage.py check
+flake8 .
+python manage.py test
+```
 
 ## Contributing
 

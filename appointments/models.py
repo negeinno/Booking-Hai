@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 import uuid
+from core.models import TenantManager
 
 class Appointment(models.Model):
     STATUS_CHOICES = (
@@ -41,6 +42,9 @@ class Appointment(models.Model):
     # Timestamps
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    objects = TenantManager()
+    all_objects = models.Manager()
 
     class Meta:
         ordering = ['-date', '-start_time']
