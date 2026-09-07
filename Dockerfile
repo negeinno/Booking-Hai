@@ -39,12 +39,14 @@ RUN pip install --no-cache /wheels/*
 
 COPY . $APP_HOME
 
+RUN python manage.py collectstatic --noinput
+
 # Create non-root user for security
 RUN adduser --disabled-password --gecos '' appuser && \
     chown -R appuser:appuser $APP_HOME
 
 USER appuser
 
-EXPOSE 8000
+# We remove EXPOSE 8000 so Render automatically detects the port bound by Gunicorn via the $PORT env var.
 
-CMD ["gunicorn", "-c", "gunicorn.conf.py", "booking_project.wsgi:application"]
+CMD ["bash", "-c", "python manage.py migrate && gunicorn -c gunicorn.conf.py booking_project.wsgi:application"]
