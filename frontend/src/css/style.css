@@ -1,218 +1,38 @@
-/* 
-Booking Hai - Gen Z Indian Cultural Vibe 
-Design System: Neo-brutalism, vibrant colors, Desi elements
-*/
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-:root {
-  --primary-color: #E11D48; /* Rani Pink */
-  --primary-hover: #BE123C;
-  --accent-color: #F59E0B; /* Marigold/Saffron */
-  --accent-hover: #D97706;
-  --bg-color: #FFFDF7; /* Warm off-white */
-  --bg-secondary: #FEF3C7; /* Soft yellow */
-  --text-main: #1E1B4B; /* Deep Indigo / Black */
-  --text-muted: #4338CA;
-  --border-color: #1E1B4B;
-  
-  --shadow-sm: 2px 2px 0px var(--text-main);
-  --shadow-md: 4px 4px 0px var(--text-main);
-  --shadow-lg: 6px 6px 0px var(--text-main);
-  --shadow-xl: 8px 8px 0px var(--text-main);
-  
-  --border-radius-sm: 0px;
-  --border-radius-md: 8px;
-  --border-radius-lg: 12px;
-  --border-radius-xl: 16px;
-}
-
+/* Base styles */
 body {
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  color: var(--text-main);
-  background-color: var(--bg-color);
-  line-height: 1.6;
-  -webkit-font-smoothing: antialiased;
-  background-image: radial-gradient(var(--border-color) 1px, transparent 1px);
-  background-size: 30px 30px;
+  font-family: 'Space Grotesk', sans-serif;
 }
 
-h1, h2, h3, h4, h5, h6 {
-  font-family: 'Syne', sans-serif;
-  font-weight: 800;
-  letter-spacing: -0.025em;
-  color: var(--text-main);
+/* Neo-Brutalist Utilities */
+.brutal-border {
+  border: 3px solid #000;
 }
-
-a {
-  color: var(--primary-color);
-  text-decoration: none;
-  transition: all 0.2s ease-in-out;
+.brutal-shadow {
+  box-shadow: 4px 4px 0px #000;
 }
-
-a:hover {
-  color: var(--primary-hover);
-  text-decoration: underline;
-  text-decoration-thickness: 3px;
-  text-underline-offset: 4px;
+.brutal-shadow-lg {
+  box-shadow: 8px 8px 0px #000;
 }
-
-/* Navbar */
-.navbar {
-  background-color: var(--bg-color) !important;
-  border-bottom: 3px solid var(--text-main);
+.brutal-hover {
+  transition: all 0.2s ease;
 }
-
-.navbar-brand {
-  font-family: 'Syne', sans-serif;
-  font-weight: 900;
-  font-size: 1.8rem;
-  color: var(--text-main) !important;
-  text-transform: uppercase;
-}
-
-.navbar-nav .nav-link {
-  font-weight: 700;
-  color: var(--text-main);
-  padding: 0.5rem 1rem;
-  border: 2px solid transparent;
-  border-radius: var(--border-radius-md);
-  margin: 0 0.2rem;
-  transition: all 0.2s;
-}
-
-.navbar-nav .nav-link:hover, .navbar-nav .nav-link.active {
-  color: var(--text-main);
-  background-color: var(--accent-color);
-  border-color: var(--text-main);
-  box-shadow: var(--shadow-sm);
+.brutal-hover:hover {
   transform: translate(-2px, -2px);
-  text-decoration: none;
+  box-shadow: 6px 6px 0px #000;
 }
-
-/* Neo Brutalist Buttons */
-.btn {
-  font-weight: 700;
-  border-radius: var(--border-radius-md);
-  padding: 0.8rem 1.5rem;
-  transition: all 0.2s;
-  border: 3px solid var(--text-main);
-  box-shadow: var(--shadow-md);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.btn:active {
+.brutal-hover:active {
   transform: translate(2px, 2px);
-  box-shadow: 2px 2px 0px var(--text-main);
+  box-shadow: 2px 2px 0px #000;
 }
 
-.btn-primary {
-  background-color: var(--primary-color);
-  color: white;
+.marquee-animation {
+  animation: scroll 20s linear infinite;
 }
-
-.btn-primary:hover {
-  background-color: var(--primary-hover);
-  color: white;
-  transform: translate(-2px, -2px);
-  box-shadow: var(--shadow-lg);
-}
-
-.btn-accent {
-  background-color: var(--accent-color);
-  color: var(--text-main);
-}
-
-.btn-outline-primary {
-  background-color: white;
-  color: var(--text-main);
-}
-
-.btn-outline-primary:hover {
-  background-color: var(--bg-secondary);
-  color: var(--text-main);
-  transform: translate(-2px, -2px);
-  box-shadow: var(--shadow-lg);
-}
-
-/* Cards */
-.card, .feature-card {
-  background: white;
-  border: 3px solid var(--text-main);
-  border-radius: var(--border-radius-lg);
-  padding: 2rem;
-  transition: all 0.3s ease;
-  box-shadow: var(--shadow-lg);
-}
-
-.feature-card:hover {
-  transform: translate(-4px, -4px);
-  box-shadow: var(--shadow-xl);
-}
-
-.feature-icon {
-  width: 64px;
-  height: 64px;
-  border: 3px solid var(--text-main);
-  border-radius: 50%;
-  background-color: var(--accent-color);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 1.5rem;
-  color: var(--text-main);
-  font-size: 2rem;
-  box-shadow: var(--shadow-sm);
-}
-
-/* Input Forms Neo Brutalist */
-.form-control, .input-group-text {
-  border: 3px solid var(--text-main) !important;
-  border-radius: var(--border-radius-md);
-  box-shadow: var(--shadow-sm);
-  font-weight: 500;
-}
-
-.input-group-text {
-  background-color: var(--bg-secondary) !important;
-}
-
-.form-control:focus {
-  box-shadow: var(--shadow-md);
-  outline: none;
-  border-color: var(--primary-color) !important;
-}
-
-/* Desi Vibe Animations */
-@keyframes float {
-  0% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
-  100% { transform: translateY(0px); }
-}
-
-.floating-desi {
-  animation: float 4s ease-in-out infinite;
-}
-
-/* Footer */
-footer {
-  background-color: var(--text-main);
-  color: var(--bg-secondary);
-  border-top: 5px solid var(--primary-color);
-  padding: 4rem 0 2rem;
-}
-
-footer h5, footer h6 {
-  color: var(--accent-color);
-}
-
-.footer-link {
-  color: white;
-  font-size: 1rem;
-  margin-bottom: 0.5rem;
-  display: block;
-  font-weight: 500;
-}
-
-.footer-link:hover {
-  color: var(--primary-color);
+@keyframes scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
 }

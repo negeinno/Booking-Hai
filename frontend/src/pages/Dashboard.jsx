@@ -1,189 +1,71 @@
-import React from 'react';
+﻿import React from 'react';
 import { Link } from 'react-router-dom';
 
 const Dashboard = () => {
     return (
-        <>
+        <div className="min-h-screen bg-slate-50 font-space-grotesk flex flex-col md:flex-row">
             
+            {/* Sidebar */}
+            <aside className="w-full md:w-64 bg-black text-white border-r-[4px] border-black md:min-h-screen flex flex-col">
+                <div className="p-6 border-b-[3px] border-slate-800">
+                    <Link to="/" className="text-2xl font-black tracking-tighter text-brand-yellow">Booking Hai.</Link>
+                </div>
+                <nav className="flex-1 p-4 space-y-2 font-bold text-lg">
+                    <Link to="/dashboard" className="block px-4 py-3 bg-brand-blue text-white border-[3px] border-transparent rounded-lg">Home</Link>
+                    <Link to="#" className="block px-4 py-3 hover:bg-slate-800 border-[3px] border-transparent hover:border-brand-pink transition-colors rounded-lg">Bookings</Link>
+                    <Link to="#" className="block px-4 py-3 hover:bg-slate-800 border-[3px] border-transparent hover:border-brand-pink transition-colors rounded-lg">Services</Link>
+                    <Link to="#" className="block px-4 py-3 hover:bg-slate-800 border-[3px] border-transparent hover:border-brand-pink transition-colors rounded-lg">Settings</Link>
+                </nav>
+                <div className="p-4 border-t-[3px] border-slate-800">
+                    <Link to="/" className="block px-4 py-3 text-red-400 font-bold hover:bg-slate-800 rounded-lg">Log Out</Link>
+                </div>
+            </aside>
 
-    {/* Navbar */}
-    <nav className="navbar navbar-expand-lg bg-white sticky-top shadow-sm py-3">
-        <div className="container">
-            <Link className="navbar-brand" to="/">Booking Hai.</Link>
-            <button className="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span className="navbar-toggler-icon"></span>
-            </button>
-            <div className="collapse navbar-collapse" id="navbarContent">
-                <ul className="navbar-nav mx-auto mb-2 mb-lg-0">
-                    <li className="nav-item">
-                        <Link className="nav-link" to="#features">Features</Link>
-                    </li>
-                    <li className="nav-item">
-                        <Link className="nav-link" to="">Map</Link>
-                    </li>
-                    <li className="nav-item">
-                        <Link className="nav-link" to="">Directory</Link>
-                    </li>
-                </ul>
-                <div className="d-flex gap-2 align-items-center">
-                    
-                        <Link to="/dashboard" className="btn btn-outline-primary border-0 me-2 fw-medium">Dashboard</Link>
-                        <div className="dropdown">
-                            <Link className="nav-link dropdown-toggle fw-bold text-dark d-flex align-items-center" to="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                
-                                    <img src="" alt="User" className="rounded-circle me-2 object-fit-cover" width="32" height="32" />
-                                
-                                    <div className="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center me-2 small" style={{width: '32px', height: '32px'}}>
-                                        
-                                    </div>
-                                
-                                
-                            </Link>
-                            <ul className="dropdown-menu dropdown-menu-end shadow border-0 rounded-3 mt-2">
-                                <li><Link className="dropdown-item py-2" to="">Profile</Link></li>
-                                <li><hr className="dropdown-divider" /></li>
-                                <li>
-                                    <form method="post" action="">
-                                        
-                                        <button type="submit" className="dropdown-item py-2 text-danger">Log out</button>
-                                    </form>
-                                </li>
-                            </ul>
+            {/* Main Content */}
+            <main className="flex-1 flex flex-col">
+                {/* Header */}
+                <header className="bg-white border-b-[4px] border-black p-6 flex justify-between items-center z-10">
+                    <h1 className="text-2xl font-black uppercase">Dashboard</h1>
+                    <div className="flex items-center space-x-4">
+                        <span className="font-bold hidden md:inline-block">Hello, Boss!</span>
+                        <div className="w-12 h-12 bg-brand-pink brutal-border rounded-full flex items-center justify-center font-black text-xl text-white">B</div>
+                    </div>
+                </header>
+                
+                {/* Dashboard Widgets */}
+                <div className="p-6 md:p-10 flex-1 overflow-y-auto">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+                        <div className="bg-brand-yellow brutal-border brutal-shadow p-6">
+                            <h3 className="font-bold text-lg mb-2">Total Bookings</h3>
+                            <p className="text-5xl font-black">124</p>
                         </div>
+                        <div className="bg-brand-green brutal-border brutal-shadow p-6 text-white">
+                            <h3 className="font-bold text-lg mb-2">Revenue</h3>
+                            <p className="text-5xl font-black">₹45K</p>
+                        </div>
+                        <div className="bg-brand-blue brutal-border brutal-shadow p-6 text-white">
+                            <h3 className="font-bold text-lg mb-2">Profile Views</h3>
+                            <p className="text-5xl font-black">892</p>
+                        </div>
+                    </div>
                     
-                        <Link to="/login" className="btn btn-outline-primary fw-medium">Log in</Link>
-                        <Link to="/register" className="btn btn-primary fw-bold shadow-sm">Get Started</Link>
-                    
-                </div>
-            </div>
-        </div>
-    </nav>
-
-    {/* Main Content */}
-
-
-
-Dashboard - Booking Hai
-
-
-<div className="container section-padding py-5">
-    <div className="row mb-5 align-items-center">
-        <div className="col-md-8">
-            <h2 className="fw-bold mb-1">Hello, ! 👋</h2>
-            <p className="text-muted mb-0">Here is an overview of your upcoming appointments.</p>
-        </div>
-        <div className="col-md-4 text-md-end mt-3 mt-md-0">
-            <Link to="" className="btn btn-outline-primary fw-medium px-4">Browse Businesses</Link>
-        </div>
-    </div>
-
-    <h4 className="fw-bold mb-4">Upcoming Bookings</h4>
-    
-    <div className="row g-4 mb-5">
-        {/* Placeholder for upcoming bookings */}
-        <div className="col-md-6 col-lg-4">
-            <div className="card border-0 shadow-sm rounded-4 h-100 p-4">
-                <div className="d-flex justify-content-between align-items-start mb-3">
-                    <div className="badge bg-primary-subtle text-primary fw-bold px-3 py-2 rounded-pill">Tomorrow</div>
-                    <i className="bi bi-calendar-event text-muted fs-4"></i>
-                </div>
-                <h5 className="fw-bold mb-1">Haircut & Styling</h5>
-                <p className="text-muted small mb-4">with <span className="fw-medium text-dark">Urban Salon</span></p>
-                <div className="d-flex align-items-center text-muted small fw-medium">
-                    <i className="bi bi-clock me-2"></i> 10:00 AM - 11:00 AM
-                </div>
-            </div>
-        </div>
-        
-        <div className="col-md-6 col-lg-4">
-            <div className="card border-0 shadow-sm rounded-4 h-100 p-4 border border-dashed bg-light d-flex align-items-center justify-content-center text-center" style={{minHeight: '200px'}}>
-                <div>
-                    <div className="rounded-circle bg-white shadow-sm d-inline-flex align-items-center justify-content-center mb-3" style={{width: '50px', height: '50px'}}>
-                        <i className="bi bi-plus text-primary fs-3"></i>
-                    </div>
-                    <h6 className="fw-bold">Book a new appointment</h6>
-                    <p className="text-muted small mb-0">Find a business near you</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <h4 className="fw-bold mb-4">Past Bookings</h4>
-    <div className="card border-0 shadow-sm rounded-4 p-0 overflow-hidden">
-        <ul className="list-group list-group-flush">
-            <li className="list-group-item p-4 d-flex justify-content-between align-items-center">
-                <div className="d-flex align-items-center">
-                    <div className="rounded bg-light d-flex align-items-center justify-content-center me-4" style={{width: '60px', height: '60px'}}>
-                        <span className="text-muted fw-bold">AUG</span>
-                    </div>
-                    <div>
-                        <h6 className="fw-bold mb-1">Consultation Session</h6>
-                        <p className="text-muted small mb-0">Legal Experts Ltd</p>
+                    <div className="bg-white brutal-border brutal-shadow-lg p-8">
+                        <h2 className="text-2xl font-black uppercase mb-6 border-b-[3px] border-black pb-4">Recent Bookings</h2>
+                        <div className="space-y-4">
+                            {[1,2,3].map(i => (
+                                <div key={i} className="flex justify-between items-center p-4 bg-slate-50 brutal-border hover:bg-brand-yellow/10 transition-colors">
+                                    <div>
+                                        <p className="font-bold text-lg">Rahul Kumar</p>
+                                        <p className="text-slate-600 font-medium">Haircut & Styling • Tomorrow, 10:00 AM</p>
+                                    </div>
+                                    <button className="px-4 py-2 bg-black text-white font-bold brutal-border brutal-hover">View</button>
+                                </div>
+                            ))}
+                        </div>
                     </div>
                 </div>
-                <div className="text-end">
-                    <div className="fw-bold mb-1">Aug 15, 2026</div>
-                    <span className="badge bg-success-subtle text-success">Completed</span>
-                </div>
-            </li>
-        </ul>
-    </div>
-</div>
-
-
-    <main>
-        
-        
-    </main>
-
-    {/* Footer */}
-    <footer>
-        <div className="container">
-            <div className="row g-4">
-                <div className="col-lg-4">
-                    <h5 className="fw-bold mb-3 fs-3">Booking Hai. 🌶️</h5>
-                    <p className="text-muted fw-medium fs-5">India's most lit platform to manage your dhanda. Create your booking page and get customers instantly. 100% Swag.</p>
-                </div>
-                <div className="col-lg-2 col-6">
-                    <h6 className="fw-bold mb-3">Product</h6>
-                    <Link to="#features" className="footer-link">Features</Link>
-                    <Link to="#"  className="footer-link">Pricing</Link>
-                    <Link to="#"  className="footer-link">Integrations</Link>
-                    <Link to="#"  className="footer-link">Changelog</Link>
-                </div>
-                <div className="col-lg-2 col-6">
-                    <h6 className="fw-bold mb-3">Resources</h6>
-                    <Link to="#"  className="footer-link">Documentation</Link>
-                    <Link to="#"  className="footer-link">Help Center</Link>
-                    <Link to="#"  className="footer-link">Blog</Link>
-                    <Link to="#"  className="footer-link">Community</Link>
-                </div>
-                <div className="col-lg-2 col-6">
-                    <h6 className="fw-bold mb-3">Company</h6>
-                    <Link to="#"  className="footer-link">About</Link>
-                    <Link to="#"  className="footer-link">Customers</Link>
-                    <Link to="#"  className="footer-link">Careers</Link>
-                    <Link to="#"  className="footer-link">Contact</Link>
-                </div>
-                <div className="col-lg-2 col-6">
-                    <h6 className="fw-bold mb-3">Legal</h6>
-                    <Link to="#"  className="footer-link">Privacy Policy</Link>
-                    <Link to="#"  className="footer-link">Terms of Service</Link>
-                </div>
-            </div>
-            <div className="border-top mt-5 pt-4 text-center text-muted small">
-                <p>&copy;  Booking Hai. All rights reserved.</p>
-            </div>
+            </main>
         </div>
-    </footer>
-
-    {/* Bootstrap JS */}
-    
-    
-    
-
-        </>
     );
 };
-
 export default Dashboard;
