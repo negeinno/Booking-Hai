@@ -1,9 +1,4 @@
-﻿{
-  "version": 2,
-  "routes": [
-    { "src": "/(.*)\.html", "dest": "/.html" },
-    { "src": "/css/(.*)", "dest": "/css/" },
-    { "src": "/js/(.*)", "dest": "/js/" },
-    { "src": "/(.*)", "dest": "/.html" }
-  ]
+{
+  "cleanUrls": true,
+  "trailingSlash": false
 }
