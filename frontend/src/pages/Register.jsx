@@ -9,38 +9,38 @@ const Register = () => {
     {/* Navbar */}
     <nav className="navbar navbar-expand-lg bg-white sticky-top shadow-sm py-3">
         <div className="container">
-            <a className="navbar-brand" to="">Booking Hai.</Link>
+            <Link className="navbar-brand" to="">Booking Hai.</Link>
             <button className="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span className="navbar-toggler-icon"></span>
             </button>
             <div className="collapse navbar-collapse" id="navbarContent">
                 <ul className="navbar-nav mx-auto mb-2 mb-lg-0">
                     <li className="nav-item">
-                        <a className="nav-link" to="#features">Features</Link>
+                        <Link className="nav-link" to="#features">Features</Link>
                     </li>
                     <li className="nav-item">
-                        <a className="nav-link" to="">Map</Link>
+                        <Link className="nav-link" to="">Map</Link>
                     </li>
                     <li className="nav-item">
-                        <a className="nav-link" to="">Directory</Link>
+                        <Link className="nav-link" to="">Directory</Link>
                     </li>
                 </ul>
                 <div className="d-flex gap-2 align-items-center">
                     
-                        <a to="" className="btn btn-outline-primary border-0 me-2 fw-medium">Dashboard</Link>
+                        <Link to="" className="btn btn-outline-primary border-0 me-2 fw-medium">Dashboard</Link>
                         <div className="dropdown">
-                            <a className="nav-link dropdown-toggle fw-bold text-dark d-flex align-items-center" to="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <Link className="nav-link dropdown-toggle fw-bold text-dark d-flex align-items-center" to="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 
                                     <img src="" alt="User" className="rounded-circle me-2 object-fit-cover" width="32" height="32" />
                                 
-                                    <div className="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center me-2 small" >
+                                    <div className="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center me-2 small" style={{width: '32px', height: '32px'}}>
                                         
                                     </div>
                                 
                                 
                             </Link>
                             <ul className="dropdown-menu dropdown-menu-end shadow border-0 rounded-3 mt-2">
-                                <li><a className="dropdown-item py-2" to="">Profile</Link></li>
+                                <li><Link className="dropdown-item py-2" to="">Profile</Link></li>
                                 <li><hr className="dropdown-divider" /></li>
                                 <li>
                                     <form method="post" action="">
@@ -51,8 +51,8 @@ const Register = () => {
                             </ul>
                         </div>
                     
-                        <a to="" className="btn btn-outline-primary fw-medium">Log in</Link>
-                        <a to="" className="btn btn-primary fw-bold shadow-sm">Get Started</Link>
+                        <Link to="" className="btn btn-outline-primary fw-medium">Log in</Link>
+                        <Link to="" className="btn btn-primary fw-bold shadow-sm">Get Started</Link>
                     
                 </div>
             </div>
@@ -129,7 +129,7 @@ Sign Up - Booking Hai
                 
                 <div className="text-center mt-3">
                     <span className="text-muted">Already have an account?</span>
-                    <a to="" className="fw-medium text-decoration-none">Log in</Link>
+                    <Link to="" className="fw-medium text-decoration-none">Log in</Link>
                 </div>
             </div>
         </div>
@@ -152,29 +152,29 @@ Sign Up - Booking Hai
                 </div>
                 <div className="col-lg-2 col-6">
                     <h6 className="fw-bold mb-3">Product</h6>
-                    <a to="#features" className="footer-link">Features</Link>
-                    <a to="#"  className="footer-link">Pricing</Link>
-                    <a to="#"  className="footer-link">Integrations</Link>
-                    <a to="#"  className="footer-link">Changelog</Link>
+                    <Link to="#features" className="footer-link">Features</Link>
+                    <Link to="#"  className="footer-link">Pricing</Link>
+                    <Link to="#"  className="footer-link">Integrations</Link>
+                    <Link to="#"  className="footer-link">Changelog</Link>
                 </div>
                 <div className="col-lg-2 col-6">
                     <h6 className="fw-bold mb-3">Resources</h6>
-                    <a to="#"  className="footer-link">Documentation</Link>
-                    <a to="#"  className="footer-link">Help Center</Link>
-                    <a to="#"  className="footer-link">Blog</Link>
-                    <a to="#"  className="footer-link">Community</Link>
+                    <Link to="#"  className="footer-link">Documentation</Link>
+                    <Link to="#"  className="footer-link">Help Center</Link>
+                    <Link to="#"  className="footer-link">Blog</Link>
+                    <Link to="#"  className="footer-link">Community</Link>
                 </div>
                 <div className="col-lg-2 col-6">
                     <h6 className="fw-bold mb-3">Company</h6>
-                    <a to="#"  className="footer-link">About</Link>
-                    <a to="#"  className="footer-link">Customers</Link>
-                    <a to="#"  className="footer-link">Careers</Link>
-                    <a to="#"  className="footer-link">Contact</Link>
+                    <Link to="#"  className="footer-link">About</Link>
+                    <Link to="#"  className="footer-link">Customers</Link>
+                    <Link to="#"  className="footer-link">Careers</Link>
+                    <Link to="#"  className="footer-link">Contact</Link>
                 </div>
                 <div className="col-lg-2 col-6">
                     <h6 className="fw-bold mb-3">Legal</h6>
-                    <a to="#"  className="footer-link">Privacy Policy</Link>
-                    <a to="#"  className="footer-link">Terms of Service</Link>
+                    <Link to="#"  className="footer-link">Privacy Policy</Link>
+                    <Link to="#"  className="footer-link">Terms of Service</Link>
                 </div>
             </div>
             <div className="border-top mt-5 pt-4 text-center text-muted small">
