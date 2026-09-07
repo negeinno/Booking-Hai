@@ -9,7 +9,7 @@ const Register = () => {
     {/* Navbar */}
     <nav className="navbar navbar-expand-lg bg-white sticky-top shadow-sm py-3">
         <div className="container">
-            <Link className="navbar-brand" to="">Booking Hai.</Link>
+            <Link className="navbar-brand" to="/">Booking Hai.</Link>
             <button className="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span className="navbar-toggler-icon"></span>
             </button>
@@ -27,7 +27,7 @@ const Register = () => {
                 </ul>
                 <div className="d-flex gap-2 align-items-center">
                     
-                        <Link to="" className="btn btn-outline-primary border-0 me-2 fw-medium">Dashboard</Link>
+                        <Link to="/dashboard" className="btn btn-outline-primary border-0 me-2 fw-medium">Dashboard</Link>
                         <div className="dropdown">
                             <Link className="nav-link dropdown-toggle fw-bold text-dark d-flex align-items-center" to="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 
@@ -51,8 +51,8 @@ const Register = () => {
                             </ul>
                         </div>
                     
-                        <Link to="" className="btn btn-outline-primary fw-medium">Log in</Link>
-                        <Link to="" className="btn btn-primary fw-bold shadow-sm">Get Started</Link>
+                        <Link to="/login" className="btn btn-outline-primary fw-medium">Log in</Link>
+                        <Link to="/register" className="btn btn-primary fw-bold shadow-sm">Get Started</Link>
                     
                 </div>
             </div>
@@ -129,7 +129,7 @@ Sign Up - Booking Hai
                 
                 <div className="text-center mt-3">
                     <span className="text-muted">Already have an account?</span>
-                    <Link to="" className="fw-medium text-decoration-none">Log in</Link>
+                    <Link to="/login" className="fw-medium text-decoration-none">Log in</Link>
                 </div>
             </div>
         </div>
