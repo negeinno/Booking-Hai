@@ -1,27 +1,14 @@
-# Production Deployment Guide
+# Deployment Guide
 
-Booking Hai is optimized for zero-downtime deployment on Render.com utilizing Neon PostgreSQL for the database layer.
+Booking Hai is designed to be deployed using Docker or directly onto PaaS providers like Render.
 
-## Render Configuration
+## Docker Deployment (Recommended)
+1. Configure environment variables in `.env` (refer to `.env.example`).
+2. Build and start services using:
+   `docker-compose -f docker-compose.prod.yml up -d --build`
+3. The cluster provisions PostgreSQL, Redis, Celery (Worker & Beat), and a Gunicorn web server.
+
+## Render Deployment
 1. Connect your GitHub repository to Render.
-2. Select **Web Service**.
-3. Render will automatically parse the `render.yaml` configuration file and generate the web service and the environment.
-
-## Environment Variables
-Ensure the following variables are securely injected into your Render dashboard or `.env` file:
-- `SECRET_KEY`
-- `DEBUG` (Must be False)
-- `DATABASE_URL` (Provided by Neon)
-- `ALLOWED_HOSTS` (e.g. your-app.onrender.com)
-- `RAZORPAY_KEY_ID` (For Phase 8 functionality)
-
-## Build Process
-Render executes `build.sh` automatically which:
-1. Installs Python dependencies (`pip install -r requirements.txt`).
-2. Runs `python manage.py collectstatic --no-input` (compresses and caches assets via WhiteNoise).
-3. Executes `python manage.py migrate` to securely upgrade the PostgreSQL schema.
-
-## Troubleshooting
-- **500 Errors**: Ensure `ALLOWED_HOSTS` includes your exact Render domain.
-- **Missing Styles**: Ensure `WhiteNoiseMiddleware` is correctly placed directly beneath `SecurityMiddleware`.
-- **Database Refused**: Verify the `DATABASE_URL` string matches the connection pooling URL provided by Neon.
+2. The `render.yaml` Blueprint automatically provisions the Web Service, Background Worker, and Redis Cache.
+3. Ensure you link a managed PostgreSQL database.

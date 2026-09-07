@@ -3,7 +3,7 @@ version: '3.8'
 services:
   web:
     build: .
-    command: gunicorn booking_project.wsgi:application --bind 0.0.0.0:8000
+    command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - .:/app
     ports:
@@ -11,33 +11,20 @@ services:
     env_file:
       - .env
     depends_on:
-      - db
       - redis
 
-  db:
-    image: postgres:15
-    environment:
-      POSTGRES_DB: booking_hai
-      POSTGRES_USER: booking_user
-      POSTGRES_PASSWORD: booking_password
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-
   redis:
-    image: redis:alpine
+    image: redis:7-alpine
     ports:
       - "6379:6379"
 
   celery:
     build: .
-    command: celery -A booking_project worker -l info
+    command: celery -A booking_project worker -l INFO
     volumes:
       - .:/app
     env_file:
       - .env
     depends_on:
       - redis
-      - db
-
-volumes:
-  postgres_data:
+      - web

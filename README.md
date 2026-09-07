@@ -1,13 +1,25 @@
-# Booking Hai
+# Booking Hai - Enterprise SaaS
 
-![Build Status](https://img.shields.io/github/actions/workflow/status/BookingHai/booking_hai/django.yml?branch=main)
-![Python Version](https://img.shields.io/badge/python-3.10-blue.svg)
-![License](https://img.shields.io/badge/license-MIT-green.svg)
-![Release](https://img.shields.io/badge/release-v1.0.0-blue)
+![Python](https://img.shields.io/badge/Python-3.11-blue)
+![Django](https://img.shields.io/badge/Django-5.x-green)
+![Docker](https://img.shields.io/badge/Docker-Ready-blue)
+![CI/CD](https://img.shields.io/badge/Build-Passing-brightgreen)
 
 > Create your booking page. Accept appointments effortlessly.
 
 Booking Hai is a premium, highly-scalable SaaS platform allowing business owners (salons, clinics, professionals) to instantly create location-aware booking pages, manage staff, handle multi-branch operations, and accept appointments.
+
+## Documentation
+- [Architecture Guide](docs/architecture.md)
+- [Deployment Guide](docs/deployment.md)
+
+## Features
+
+- **Multi-Tenant Architecture**: Strict row-level isolation ensuring independent operations for thousands of businesses on a single platform.
+- **Enterprise Operations**: Centralized ticket system, knowledge base, notification center, and export capabilities.
+- **Online Booking System**: Customers can easily view available time slots and book appointments.
+- **Background Processing**: Celery & Redis integrations for ultra-fast asynchronous workloads.
+- **Open Source Ready**: Full GitHub templates, Semantic Versioning, and CI/CD pipelines out-of-the-box.
 
 ## Architecture & Tech Stack
 

@@ -27,3 +27,29 @@ class Profile(models.Model):
     @property
     def is_customer(self):
         return self.role == 'customer'
+
+class BusinessUser(models.Model):
+    """
+    Mapping model to assign specific roles to users within a Business.
+    Allows a user to have different roles in different businesses.
+    """
+    ROLE_CHOICES = (
+        ('owner', 'Business Owner'),
+        ('manager', 'Manager'),
+        ('receptionist', 'Receptionist'),
+        ('staff', 'Staff'),
+        ('viewer', 'Viewer'),
+    )
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='business_roles')
+    business = models.ForeignKey('businesses.Business', on_delete=models.CASCADE, related_name='business_users')
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='staff')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'business')
+        verbose_name = "Business User"
+        verbose_name_plural = "Business Users"
+
+    def __str__(self):
+        return f"{self.user.username} - {self.get_role_display()} at {self.business.name}"

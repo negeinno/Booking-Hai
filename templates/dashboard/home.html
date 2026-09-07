@@ -23,17 +23,17 @@
             </h6>
             <ul class="nav flex-column mb-4">
                 <li class="nav-item">
-                    <a class="nav-link fw-medium text-primary bg-primary bg-opacity-10 rounded-3 mx-2 px-3 py-2" href="#">
+                    <a class="nav-link fw-medium text-primary bg-primary bg-opacity-10 rounded-3 mx-2 px-3 py-2" href="javascript:void(0)">
                         <i class="bi bi-house-door me-2"></i> Overview
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link fw-medium text-dark rounded-3 mx-2 px-3 py-2" href="#">
+                    <a class="nav-link fw-medium text-dark rounded-3 mx-2 px-3 py-2" href="javascript:alert('Calendar view is coming soon!')">
                         <i class="bi bi-calendar3 me-2"></i> Calendar
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link fw-medium text-dark rounded-3 mx-2 px-3 py-2" href="#">
+                    <a class="nav-link fw-medium text-dark rounded-3 mx-2 px-3 py-2" href="javascript:alert('CRM features are coming soon!')">
                         <i class="bi bi-people me-2"></i> CRM
                     </a>
                 </li>
@@ -54,7 +54,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link fw-medium text-dark rounded-3 mx-2 px-3 py-2" href="#">
+                    <a class="nav-link fw-medium text-dark rounded-3 mx-2 px-3 py-2" href="javascript:alert('Reporting dashboard is under construction')">
                         <i class="bi bi-graph-up me-2"></i> Reports
                     </a>
                 </li>
@@ -70,7 +70,7 @@
                 </div>
                 <div class="btn-toolbar mb-2 mb-md-0">
                     <div class="btn-group me-2">
-                        <button type="button" class="btn btn-sm btn-outline-primary fw-medium px-3">Share Link</button>
+                        <button type="button" class="btn btn-sm btn-outline-primary fw-medium px-3" onclick="alert('Link copied to clipboard')">Share Link</button>
                         <a href="{% url 'businesses:public_page' business.slug %}" class="btn btn-sm btn-outline-secondary fw-medium px-3" target="_blank">View Public Page</a>
                     </div>
                 </div>
@@ -105,7 +105,7 @@
                             <i class="bi bi-person-plus text-info fs-5"></i>
                         </div>
                         <h2 class="fw-bold mb-0 text-dark">{{ crm_metrics.new_customers }}</h2>
-                        <a href="#" class="text-decoration-none small mt-2 d-inline-block">View CRM &rarr;</a>
+                        <a href="javascript:alert('CRM features coming soon')" class="text-decoration-none small mt-2 d-inline-block">View CRM &rarr;</a>
                     </div>
                 </div>
                 <div class="col-md-3">

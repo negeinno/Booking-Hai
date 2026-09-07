@@ -1,207 +1,218 @@
 /* 
-Booking Hai - Premium SaaS Custom Styles 
-Design System: Clean, Modern, Minimal, Trustworthy
+Booking Hai - Gen Z Indian Cultural Vibe 
+Design System: Neo-brutalism, vibrant colors, Desi elements
 */
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
-
 :root {
-  --primary-color: #0f172a; /* Slate 900 for dark elements, gives a Notion/Stripe feel */
-  --primary-hover: #1e293b;
-  --accent-color: #3b82f6; /* Blue 500 for primary buttons/accents */
-  --accent-hover: #2563eb;
-  --bg-color: #ffffff;
-  --bg-secondary: #f8fafc;
-  --text-main: #0f172a;
-  --text-muted: #64748b;
-  --border-color: #e2e8f0;
+  --primary-color: #E11D48; /* Rani Pink */
+  --primary-hover: #BE123C;
+  --accent-color: #F59E0B; /* Marigold/Saffron */
+  --accent-hover: #D97706;
+  --bg-color: #FFFDF7; /* Warm off-white */
+  --bg-secondary: #FEF3C7; /* Soft yellow */
+  --text-main: #1E1B4B; /* Deep Indigo / Black */
+  --text-muted: #4338CA;
+  --border-color: #1E1B4B;
   
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  --shadow-sm: 2px 2px 0px var(--text-main);
+  --shadow-md: 4px 4px 0px var(--text-main);
+  --shadow-lg: 6px 6px 0px var(--text-main);
+  --shadow-xl: 8px 8px 0px var(--text-main);
   
-  --border-radius-sm: 0.375rem;
-  --border-radius-md: 0.5rem;
-  --border-radius-lg: 0.75rem;
-  --border-radius-xl: 1rem;
+  --border-radius-sm: 0px;
+  --border-radius-md: 8px;
+  --border-radius-lg: 12px;
+  --border-radius-xl: 16px;
 }
 
 body {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Plus Jakarta Sans', sans-serif;
   color: var(--text-main);
   background-color: var(--bg-color);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
+  background-image: radial-gradient(var(--border-color) 1px, transparent 1px);
+  background-size: 30px 30px;
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-weight: 700;
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
   letter-spacing: -0.025em;
   color: var(--text-main);
 }
 
 a {
-  color: var(--accent-color);
+  color: var(--primary-color);
   text-decoration: none;
   transition: all 0.2s ease-in-out;
 }
 
 a:hover {
-  color: var(--accent-hover);
+  color: var(--primary-hover);
+  text-decoration: underline;
+  text-decoration-thickness: 3px;
+  text-underline-offset: 4px;
 }
 
 /* Navbar */
+.navbar {
+  background-color: var(--bg-color) !important;
+  border-bottom: 3px solid var(--text-main);
+}
+
 .navbar-brand {
-  font-weight: 800;
-  font-size: 1.5rem;
-  letter-spacing: -0.05em;
-  color: var(--primary-color) !important;
+  font-family: 'Syne', sans-serif;
+  font-weight: 900;
+  font-size: 1.8rem;
+  color: var(--text-main) !important;
+  text-transform: uppercase;
 }
 
 .navbar-nav .nav-link {
-  font-weight: 500;
-  color: var(--text-muted);
+  font-weight: 700;
+  color: var(--text-main);
   padding: 0.5rem 1rem;
-  transition: color 0.2s;
+  border: 2px solid transparent;
+  border-radius: var(--border-radius-md);
+  margin: 0 0.2rem;
+  transition: all 0.2s;
 }
 
 .navbar-nav .nav-link:hover, .navbar-nav .nav-link.active {
   color: var(--text-main);
+  background-color: var(--accent-color);
+  border-color: var(--text-main);
+  box-shadow: var(--shadow-sm);
+  transform: translate(-2px, -2px);
+  text-decoration: none;
 }
 
-/* Buttons */
+/* Neo Brutalist Buttons */
 .btn {
-  font-weight: 500;
+  font-weight: 700;
   border-radius: var(--border-radius-md);
-  padding: 0.6rem 1.25rem;
+  padding: 0.8rem 1.5rem;
   transition: all 0.2s;
+  border: 3px solid var(--text-main);
+  box-shadow: var(--shadow-md);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0px var(--text-main);
 }
 
 .btn-primary {
   background-color: var(--primary-color);
-  border-color: var(--primary-color);
   color: white;
 }
 
 .btn-primary:hover {
   background-color: var(--primary-hover);
-  border-color: var(--primary-hover);
-  transform: translateY(-1px);
-  box-shadow: var(--shadow-md);
+  color: white;
+  transform: translate(-2px, -2px);
+  box-shadow: var(--shadow-lg);
 }
 
 .btn-accent {
   background-color: var(--accent-color);
-  border-color: var(--accent-color);
-  color: white;
-}
-
-.btn-accent:hover {
-  background-color: var(--accent-hover);
-  border-color: var(--accent-hover);
-  transform: translateY(-1px);
-  box-shadow: var(--shadow-md);
-  color: white;
+  color: var(--text-main);
 }
 
 .btn-outline-primary {
-  color: var(--primary-color);
-  border-color: var(--border-color);
+  background-color: white;
+  color: var(--text-main);
 }
 
 .btn-outline-primary:hover {
   background-color: var(--bg-secondary);
-  border-color: var(--primary-color);
-  color: var(--primary-color);
-}
-
-/* Hero Section */
-.hero-section {
-  padding: 6rem 0;
-  background-color: var(--bg-color);
-}
-
-.hero-title {
-  font-size: 3.5rem;
-  font-weight: 800;
-  line-height: 1.1;
-  margin-bottom: 1.5rem;
   color: var(--text-main);
-}
-
-.hero-subtitle {
-  font-size: 1.25rem;
-  color: var(--text-muted);
-  margin-bottom: 2.5rem;
-  font-weight: 400;
-  max-width: 600px;
+  transform: translate(-2px, -2px);
+  box-shadow: var(--shadow-lg);
 }
 
 /* Cards */
-.feature-card {
+.card, .feature-card {
   background: white;
-  border: 1px solid var(--border-color);
+  border: 3px solid var(--text-main);
   border-radius: var(--border-radius-lg);
   padding: 2rem;
   transition: all 0.3s ease;
-  height: 100%;
+  box-shadow: var(--shadow-lg);
 }
 
 .feature-card:hover {
-  transform: translateY(-5px);
+  transform: translate(-4px, -4px);
   box-shadow: var(--shadow-xl);
-  border-color: transparent;
 }
 
 .feature-icon {
-  width: 48px;
-  height: 48px;
-  border-radius: var(--border-radius-md);
-  background-color: var(--bg-secondary);
+  width: 64px;
+  height: 64px;
+  border: 3px solid var(--text-main);
+  border-radius: 50%;
+  background-color: var(--accent-color);
   display: flex;
   align-items: center;
   justify-content: center;
   margin-bottom: 1.5rem;
-  color: var(--accent-color);
-  font-size: 1.5rem;
+  color: var(--text-main);
+  font-size: 2rem;
+  box-shadow: var(--shadow-sm);
 }
 
-/* Sections */
-.section-padding {
-  padding: 5rem 0;
+/* Input Forms Neo Brutalist */
+.form-control, .input-group-text {
+  border: 3px solid var(--text-main) !important;
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-sm);
+  font-weight: 500;
 }
 
-.bg-secondary {
+.input-group-text {
   background-color: var(--bg-secondary) !important;
 }
 
-.section-title {
-  font-size: 2.5rem;
-  font-weight: 700;
-  margin-bottom: 1rem;
+.form-control:focus {
+  box-shadow: var(--shadow-md);
+  outline: none;
+  border-color: var(--primary-color) !important;
 }
 
-.section-subtitle {
-  color: var(--text-muted);
-  font-size: 1.125rem;
-  margin-bottom: 3rem;
+/* Desi Vibe Animations */
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+}
+
+.floating-desi {
+  animation: float 4s ease-in-out infinite;
 }
 
 /* Footer */
 footer {
-  background-color: var(--bg-color);
-  border-top: 1px solid var(--border-color);
+  background-color: var(--text-main);
+  color: var(--bg-secondary);
+  border-top: 5px solid var(--primary-color);
   padding: 4rem 0 2rem;
 }
 
+footer h5, footer h6 {
+  color: var(--accent-color);
+}
+
 .footer-link {
-  color: var(--text-muted);
-  font-size: 0.875rem;
+  color: white;
+  font-size: 1rem;
   margin-bottom: 0.5rem;
   display: block;
+  font-weight: 500;
 }
 
 .footer-link:hover {
-  color: var(--text-main);
+  color: var(--primary-color);
 }

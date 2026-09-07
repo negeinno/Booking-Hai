@@ -1,19 +1,24 @@
-# Changelog\n\n## [1.0.0] - 2026-09-05\n### Added\n- Docker & Docker Compose configurations for production.\n- Enterprise-ready repository architecture (CODEOWNERS, Dependabot).\n- Extensive Developer Documentation (/docs).\n- Official v1.0.0 Production Release.
+# Changelog
 
-## [0.9.0] - 2026-09-05
-### Added
-- Phase 9: Reviews, Ratings, Reputation engine.
-- Favorites application.
-- Sort by rating and popularity on the discovery grid.
-- Business model cached rating to optimize marketplace load speeds.
+All notable changes to this project will be documented in this file.
 
-## [0.1.0] - 2026-09-05
-### Added
-- Initial location and CRM features.
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.0.0-beta] - 2026-09-05
+## [1.0.0] - 2026-09-07
+
 ### Added
-- Phase 10: Marketing, Automation, and AI Engine.
-- Async Celery task architecture for Automation Rules.
-- Modular AIGeneratorService.
-- Coupon and Promotional models.
+- **Multi-Tenant Architecture**: Strict row-level isolation via `TenantManager`.
+- **Booking Engine**: Advanced scheduling, buffer times, and service management.
+- **Support & Operations**: Centralized ticket system, knowledge base, notification center, and export capabilities.
+- **Enterprise DevOps**: Fully dockerized stack (Celery, Redis, Postgres, Gunicorn).
+- **SEO & Accessibility**: WCAG compliant templates, canonical URLs, robots.txt, and sitemaps.
+- **Demo Data Generator**: Embedded management command for initializing environments.
+
+### Changed
+- Standardized UI/UX across all 35+ templates.
+- Abstracted file and email storage to allow Drop-In cloud replacements.
+
+### Security
+- Integrated `AuditLog` mapping User Agents and IPs.
+- Configured Production-grade CSRF/Session cookie protection.
