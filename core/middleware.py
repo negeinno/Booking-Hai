@@ -24,23 +24,23 @@ class TenantMiddleware(MiddlewareMixin):
         #         pass
 
         # Current implementation based on logged-in user:
-        if request.user.is_authenticated:
-            # First, check if the user is associated with any business via BusinessUser/roles
-            # Or as an owner directly. For now, fallback to owner.
-            # We will use user.businesses.first() for owners, or if they have a role.
-            business = getattr(request.user, 'businesses', None)
-            if business and business.exists():
-                tenant = business.first()
-                set_current_tenant(tenant)
-                request.business = tenant
-                return
-            
-            # If user is a staff member
-            if hasattr(request.user, 'staffmember') and request.user.staffmember:
-                tenant = request.user.staffmember.business
-                set_current_tenant(tenant)
-                request.business = tenant
-                return
+        try:
+            if request.user.is_authenticated:
+                business = getattr(request.user, 'businesses', None)
+                if business and business.exists():
+                    tenant = business.first()
+                    set_current_tenant(tenant)
+                    request.business = tenant
+                    return
+                
+                if hasattr(request.user, 'staffmember') and request.user.staffmember:
+                    tenant = request.user.staffmember.business
+                    set_current_tenant(tenant)
+                    request.business = tenant
+                    return
+        except Exception as e:
+            import logging
+            logging.error(f"TenantMiddleware error (DB likely not ready): {e}")
         
         request.business = None
 

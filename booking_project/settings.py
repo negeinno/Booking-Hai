@@ -1,4 +1,4 @@
-﻿import os
+import os
 from pathlib import Path
 import dj_database_url
 from dotenv import load_dotenv
@@ -211,6 +211,11 @@ LOGGING = {
         'django': {
             'handlers': ['console'],
             'level': os.environ.get('DJANGO_LOG_LEVEL', 'INFO'),
+            'propagate': False,
+        },
+        'django.request': {
+            'handlers': ['console'],
+            'level': 'ERROR',
             'propagate': False,
         },
     },
