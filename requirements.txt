@@ -8,3 +8,6 @@ python-dotenv
 redis
 sentry-sdk
 whitenoise
+djangorestframework
+django-cors-headers
+djangorestframework-simplejwt

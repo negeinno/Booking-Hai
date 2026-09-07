@@ -1,4 +1,4 @@
-import os
+﻿import os
 from pathlib import Path
 import dj_database_url
 from dotenv import load_dotenv
@@ -30,6 +30,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'api',
+    'rest_framework',
+    'rest_framework_simplejwt',
+    'corsheaders',
     
     # Local Apps
     'core',
@@ -60,6 +64,7 @@ LOGIN_URL = 'login'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -219,3 +224,20 @@ if SENTRY_DSN:
         traces_sample_rate=1.0,
         profiles_sample_rate=1.0,
     )
+
+
+# REST Framework Config
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+}
+
+# CORS Config
+if DEBUG:
+    CORS_ALLOW_ALL_ORIGINS = True
+else:
+    CORS_ALLOWED_ORIGINS = [
+        'https://booking-hai.vercel.app',
+    ]
+
