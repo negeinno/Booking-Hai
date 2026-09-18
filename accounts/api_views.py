@@ -18,7 +18,7 @@ resend.api_key = os.environ.get('RESEND_API_KEY')
 def send_otp_email(email, otp_code):
     try:
         if resend.api_key:
-            from_email = os.environ.get('EMAIL_FROM', 'Booking Hai <onboarding@resend.dev>')
+            from_email = os.environ.get('EMAIL_FROM', 'Booking Hai <onboarding@negeinno.in>')
             response = resend.Emails.send({
                 "from": from_email,
                 "to": [email],
