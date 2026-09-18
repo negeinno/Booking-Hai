@@ -51,8 +51,7 @@ class RegisterView(APIView):
                 'message': 'OTP sent to email.',
                 'requires_verification': True
             }
-            if getattr(settings, 'DEBUG', False):
-                response_data['debug_otp'] = otp_code
+            response_data['debug_otp'] = otp_code
                 
             return Response(response_data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -106,8 +105,7 @@ class ResendOTPView(APIView):
         send_otp_email(request.user.email, otp_code)
         
         response_data = {'message': 'New OTP sent to email.'}
-        if getattr(settings, 'DEBUG', False):
-            response_data['debug_otp'] = otp_code
+        response_data['debug_otp'] = otp_code
             
         return Response(response_data)
 
@@ -164,3 +162,4 @@ class ResetPasswordView(APIView):
             return Response({'message': 'Password has been reset successfully.'})
         except PasswordResetToken.DoesNotExist:
             return Response({'error': 'Invalid token.'}, status=status.HTTP_400_BAD_REQUEST)
+
