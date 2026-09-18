@@ -1,4 +1,3 @@
-
 import React, { createContext, useState, useEffect } from 'react';
 import { API_BASE } from '../config/api';
 
@@ -12,25 +11,29 @@ export const AuthProvider = ({ children }) => {
 
     const loginUser = async (e) => {
         e.preventDefault();
-        const response = await fetch(API_BASE + '/api/v1/auth/login/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({'username': e.target.username.value, 'password': e.target.password.value})
-        });
-        const data = await response.json();
+        try {
+            const response = await fetch(API_BASE + '/api/v1/auth/login/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({'username': e.target.username.value, 'password': e.target.password.value})
+            });
+            const data = await response.json();
 
-        if (response.status === 200) {
-            setAuthTokens(data);
-            setUser(data.user);
-            localStorage.setItem('authTokens', JSON.stringify(data));
-            window.location.href = '/dashboard';
-        } else if (response.status === 403 && data.requires_verification) {
-            window.location.href = '/verify-otp?tokens=' + encodeURIComponent(JSON.stringify(data));
-            // Actually better to pass through state, but window.location can't do that easily without react-router's navigate
-        } else {
-            alert(data.error || 'Something went wrong!');
+            if (response.status === 200) {
+                setAuthTokens(data);
+                setUser(data.user);
+                localStorage.setItem('authTokens', JSON.stringify(data));
+                window.location.href = '/dashboard';
+                return { success: true };
+            } else if (response.status === 403 && data.requires_verification) {
+                return { success: false, error: 'Please verify your email before logging in. Check your signup email for the OTP.' };
+            } else {
+                return { success: false, error: data.error || 'Invalid Credentials' };
+            }
+        } catch (err) {
+            return { success: false, error: 'Network error. Please try again.' };
         }
     }
 
