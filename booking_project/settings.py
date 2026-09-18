@@ -18,7 +18,8 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-hlu)^+3*(42mg-k8m@#0r
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1,bookinghai.onrender.com,.onrender.com').split(',')
+env_hosts = os.environ.get('ALLOWED_HOSTS', '').split(',')
+ALLOWED_HOSTS = [host.strip() for host in env_hosts if host.strip()] + ['localhost', '127.0.0.1', 'bookinghai.onrender.com', '.onrender.com']
 
 
 # Application definition
@@ -240,11 +241,9 @@ REST_FRAMEWORK = {
 }
 
 # CORS Config
-if DEBUG:
-    CORS_ALLOW_ALL_ORIGINS = True
-else:
-    CORS_ALLOWED_ORIGINS = [
-        'https://booking-hai.vercel.app',
-        'https://bookinghai.vercel.app',
-    ]
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOWED_ORIGINS = [
+    'https://booking-hai.vercel.app',
+    'https://bookinghai.vercel.app',
+]
 
