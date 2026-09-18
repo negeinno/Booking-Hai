@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { API_BASE } from '../config/api';
 
 
 const Register = () => {
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    const role = queryParams.get('role') || 'customer';
     const navigate = useNavigate();
     const [step, setStep] = useState('register'); // 'register' or 'otp'
     const [formData, setFormData] = useState({
@@ -39,6 +42,7 @@ const Register = () => {
         const payload = {
             username: formData.username,
             email: formData.email,
+            role: role,
             password: formData.password,
             first_name,
             last_name
@@ -81,9 +85,9 @@ const Register = () => {
             <div className="w-full md:w-1/2 p-12 flex flex-col justify-center items-start border-b-[4px] md:border-b-0 md:border-r-[4px] border-black">
                 <Link to="/" className="text-4xl font-black tracking-tighter mb-12">Booking Hai.</Link>
                 <h1 className="text-5xl lg:text-7xl font-black uppercase leading-tight mb-6">
-                    Start <br /> Your Journey.
+                    {role === 'business_owner' ? "Grow Your Business." : "Start Your Journey."}
                 </h1>
-                <p className="text-xl font-bold max-w-md">Create an account to manage your bookings, customize your page, and grow your dhanda.</p>
+                <p className="text-xl font-bold max-w-md">{role === 'business_owner' ? "Create an owner account to manage your shop, staff, and appointments." : "Create an account to discover shops and book your appointments."}</p>
                 <div className="mt-12 text-6xl transform rotate-12">??</div>
             </div>
             
@@ -199,4 +203,5 @@ const Register = () => {
 };
 
 export default Register;
+
 

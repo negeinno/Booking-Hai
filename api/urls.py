@@ -14,6 +14,8 @@ from .views import HealthCheckView
 
 urlpatterns = [
     path('auth/', include('accounts.api_urls')),
+    path('shops/', include('businesses.api_urls')),
     path('health/', HealthCheckView.as_view(), name='api_health_check'),
     path('', include(router.urls)),
 ]
+

@@ -25,7 +25,7 @@ export const AuthProvider = ({ children }) => {
                 setAuthTokens(data);
                 setUser(data.user);
                 localStorage.setItem('authTokens', JSON.stringify(data));
-                window.location.href = '/dashboard';
+                if (data.user.role === 'business_owner') { window.location.href = '/owner-dashboard'; } else { window.location.href = '/customer-dashboard'; }
                 return { success: true };
             } else if (response.status === 403 && data.requires_verification) {
                 return { success: false, error: 'Please verify your email before logging in. Check your signup email for the OTP.' };
@@ -61,3 +61,4 @@ export const AuthProvider = ({ children }) => {
         </AuthContext.Provider>
     )
 }
+

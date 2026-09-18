@@ -3,6 +3,9 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import RoleSelection from './pages/RoleSelection';
+import OwnerDashboard from './pages/OwnerDashboard';
+import CustomerDashboard from './pages/CustomerDashboard';
 import Dashboard from './pages/Dashboard';
 import Discover from './pages/Discover';
 import Business from './pages/Business';
@@ -17,7 +20,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
+          <Route path="/register" element={<Register />} />`n          <Route path="/role" element={<RoleSelection />} />`n          <Route path="/owner-dashboard" element={<OwnerDashboard />} />`n          <Route path="/customer-dashboard" element={<CustomerDashboard />} />
           <Route path="/verify-otp" element={<OTPVerification />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/discover" element={<Discover />} />
@@ -29,3 +32,4 @@ function App() {
 }
 
 export default App;
+
