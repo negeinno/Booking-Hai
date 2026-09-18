@@ -1,7 +1,10 @@
-﻿import React from 'react';
+﻿import React, { useContext, useState } from 'react';
+import { AuthContext } from '../context/AuthContext';
 import { Link } from 'react-router-dom';
 
 const Login = () => {
+    const { loginUser } = useContext(AuthContext);
+    
     return (
         <div className="min-h-screen bg-brand-yellow font-space-grotesk flex flex-col md:flex-row">
             {/* Left Side - Branding */}
@@ -19,21 +22,25 @@ const Login = () => {
                 <div className="w-full max-w-md">
                     <h2 className="text-3xl font-black mb-8 uppercase text-center">Log In</h2>
                     
-                    <form className="space-y-6">
+                    <form className="space-y-6" onSubmit={loginUser}>
                         <div>
-                            <label className="block font-bold mb-2">Email Address</label>
+                            <label className="block font-bold mb-2">Username or Email Address</label>
                             <input 
-                                type="email" 
+                                name="username"
+                                type="text" 
                                 className="w-full px-4 py-3 bg-yellow-50 border-[3px] border-black focus:outline-none focus:ring-4 focus:ring-brand-pink/20 brutal-shadow brutal-hover transition-all font-medium"
-                                placeholder="boss@bookinghai.com"
+                                placeholder="boss"
+                                required
                             />
                         </div>
                         <div>
                             <label className="block font-bold mb-2">Password</label>
                             <input 
+                                name="password"
                                 type="password" 
                                 className="w-full px-4 py-3 bg-yellow-50 border-[3px] border-black focus:outline-none focus:ring-4 focus:ring-brand-pink/20 brutal-shadow brutal-hover transition-all font-medium"
                                 placeholder="••••••••"
+                                required
                             />
                         </div>
                         
@@ -42,7 +49,7 @@ const Login = () => {
                                 <input type="checkbox" className="w-5 h-5 border-[2px] border-black accent-brand-pink" />
                                 <span>Remember me</span>
                             </label>
-                            <Link to="#" className="text-brand-blue hover:underline">Forgot password?</Link>
+                            <Link to="/forgot-password" className="text-brand-blue hover:underline">Forgot password?</Link>
                         </div>
 
                         <button 
@@ -50,6 +57,14 @@ const Login = () => {
                             className="w-full py-4 bg-black text-white font-black text-xl brutal-shadow hover:-translate-y-1 hover:shadow-lg transition-transform uppercase"
                         >
                             Sign In
+                        </button>
+                        
+                        {/* Google Auth Button Placeholder */}
+                        <button 
+                            type="button" 
+                            className="w-full mt-4 py-4 bg-white border-[3px] border-black text-black font-black text-xl brutal-shadow hover:-translate-y-1 hover:shadow-lg transition-transform uppercase flex items-center justify-center gap-2"
+                        >
+                            Continue with Google
                         </button>
                     </form>
                     

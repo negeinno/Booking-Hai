@@ -1,7 +1,30 @@
-﻿import React from 'react';
-import { Link } from 'react-router-dom';
+﻿import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
-const Login = () => {
+const Register = () => {
+    const navigate = useNavigate();
+    const [formData, setFormData] = useState({
+        username: '', email: '', password: ''
+    });
+
+    const handleChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        const response = await fetch('/api/auth/register/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(formData)
+        });
+        if (response.status === 201) {
+            navigate('/login');
+        } else {
+            alert('Signup failed');
+        }
+    };
+
     return (
         <div className="min-h-screen bg-brand-yellow font-space-grotesk flex flex-col md:flex-row">
             {/* Left Side - Branding */}
@@ -10,7 +33,7 @@ const Login = () => {
                 <h1 className="text-5xl lg:text-7xl font-black uppercase leading-tight mb-6">
                     Start <br /> Your Journey.
                 </h1>
-                <p className="text-xl font-bold max-w-md">Login to manage your bookings, customize your page, and grow your dhanda.</p>
+                <p className="text-xl font-bold max-w-md">Create an account to manage your bookings, customize your page, and grow your dhanda.</p>
                 <div className="mt-12 text-6xl transform rotate-12">🚀</div>
             </div>
             
@@ -19,30 +42,39 @@ const Login = () => {
                 <div className="w-full max-w-md">
                     <h2 className="text-3xl font-black mb-8 uppercase text-center">Register</h2>
                     
-                    <form className="space-y-6">
+                    <form className="space-y-6" onSubmit={handleSubmit}>
+                        <div>
+                            <label className="block font-bold mb-2">Username</label>
+                            <input 
+                                name="username"
+                                type="text" 
+                                onChange={handleChange}
+                                className="w-full px-4 py-3 bg-yellow-50 border-[3px] border-black focus:outline-none focus:ring-4 focus:ring-brand-pink/20 brutal-shadow brutal-hover transition-all font-medium"
+                                placeholder="boss123"
+                                required
+                            />
+                        </div>
                         <div>
                             <label className="block font-bold mb-2">Email Address</label>
                             <input 
+                                name="email"
                                 type="email" 
+                                onChange={handleChange}
                                 className="w-full px-4 py-3 bg-yellow-50 border-[3px] border-black focus:outline-none focus:ring-4 focus:ring-brand-pink/20 brutal-shadow brutal-hover transition-all font-medium"
                                 placeholder="boss@bookinghai.com"
+                                required
                             />
                         </div>
                         <div>
                             <label className="block font-bold mb-2">Password</label>
                             <input 
+                                name="password"
                                 type="password" 
+                                onChange={handleChange}
                                 className="w-full px-4 py-3 bg-yellow-50 border-[3px] border-black focus:outline-none focus:ring-4 focus:ring-brand-pink/20 brutal-shadow brutal-hover transition-all font-medium"
                                 placeholder="••••••••"
+                                required
                             />
-                        </div>
-                        
-                        <div className="flex justify-between items-center font-bold text-sm">
-                            <label className="flex items-center space-x-2 cursor-pointer">
-                                <input type="checkbox" className="w-5 h-5 border-[2px] border-black accent-brand-pink" />
-                                <span>Remember me</span>
-                            </label>
-                            <Link to="#" className="text-brand-blue hover:underline">Forgot password?</Link>
                         </div>
 
                         <button 
@@ -61,4 +93,4 @@ const Login = () => {
         </div>
     );
 };
-export default Login;
+export default Register;

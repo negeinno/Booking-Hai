@@ -1,4 +1,4 @@
-﻿from django.urls import path, include
+from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from .views import *
 
@@ -11,5 +11,6 @@ router.register(r'appointments', AppointmentViewSet)
 router.register(r'locations', BusinessLocationViewSet)
 
 urlpatterns = [
+    path('auth/', include('accounts.api_urls')),
     path('', include(router.urls)),
 ]

@@ -6,19 +6,22 @@ import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import Discover from './pages/Discover';
 import Business from './pages/Business';
+import { AuthProvider } from './context/AuthContext';
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/discover" element={<Discover />} />
-        <Route path="/business" element={<Business />} />
-      </Routes>
-    </Router>
+    <AuthProvider>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/discover" element={<Discover />} />
+          <Route path="/business" element={<Business />} />
+        </Routes>
+      </Router>
+    </AuthProvider>
   );
 }
 

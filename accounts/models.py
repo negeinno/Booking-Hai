@@ -15,6 +15,7 @@ class Profile(models.Model):
     city = models.CharField(max_length=100, blank=True)
     state = models.CharField(max_length=100, blank=True)
     country = models.CharField(max_length=100, blank=True)
+    is_email_verified = models.BooleanField(default=False)
     joined_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -53,3 +54,15 @@ class BusinessUser(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.get_role_display()} at {self.business.name}"
+
+import uuid
+
+class EmailVerificationToken(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='email_verification_token')
+    token = models.UUIDField(default=uuid.uuid4, editable=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+class PasswordResetToken(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='password_reset_tokens')
+    token = models.UUIDField(default=uuid.uuid4, editable=False)
+    created_at = models.DateTimeField(auto_now_add=True)

@@ -11,3 +11,7 @@ whitenoise
 djangorestframework
 django-cors-headers
 djangorestframework-simplejwt
+
+google-auth
+resend
+google-auth-oauthlib
