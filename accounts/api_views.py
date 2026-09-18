@@ -36,6 +36,26 @@ class RegisterView(APIView):
     permission_classes = [permissions.AllowAny]
 
     def post(self, request):
+        username = request.data.get('username')
+        email = request.data.get('email')
+        
+        # Cleanup unverified accounts to prevent users getting stuck
+        try:
+            if username:
+                user_by_username = User.objects.get(username=username)
+                if hasattr(user_by_username, 'profile') and not user_by_username.profile.is_email_verified:
+                    user_by_username.delete()
+        except User.DoesNotExist:
+            pass
+            
+        try:
+            if email:
+                user_by_email = User.objects.get(email=email)
+                if hasattr(user_by_email, 'profile') and not user_by_email.profile.is_email_verified:
+                    user_by_email.delete()
+        except User.DoesNotExist:
+            pass
+
         serializer = RegisterSerializer(data=request.data)
         if serializer.is_valid():
             user = serializer.save()
@@ -137,12 +157,10 @@ class ForgotPasswordView(APIView):
         try:
             user = User.objects.get(email=email)
             token = PasswordResetToken.objects.create(user=user)
-            # In a real app, send this link via email
             reset_link = f"{settings.FRONTEND_URL}/reset-password/{token.token}"
-            print(f"Password reset link: {reset_link}") # Replace with email sending
+            print(f"Password reset link: {reset_link}")
             return Response({'message': 'Password reset link sent to email.'})
         except User.DoesNotExist:
-            # Return success anyway to prevent email enumeration
             return Response({'message': 'Password reset link sent to email.'})
 
 class ResetPasswordView(APIView):
@@ -162,4 +180,3 @@ class ResetPasswordView(APIView):
             return Response({'message': 'Password has been reset successfully.'})
         except PasswordResetToken.DoesNotExist:
             return Response({'error': 'Invalid token.'}, status=status.HTTP_400_BAD_REQUEST)
-
