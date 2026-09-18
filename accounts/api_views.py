@@ -40,21 +40,29 @@ class RegisterView(APIView):
         email = request.data.get('email')
         
         # Cleanup unverified accounts to prevent users getting stuck
-        try:
-            if username:
-                user_by_username = User.objects.get(username=username)
-                if hasattr(user_by_username, 'profile') and not user_by_username.profile.is_email_verified:
-                    user_by_username.delete()
-        except User.DoesNotExist:
-            pass
-            
-        try:
-            if email:
-                user_by_email = User.objects.get(email=email)
-                if hasattr(user_by_email, 'profile') and not user_by_email.profile.is_email_verified:
-                    user_by_email.delete()
-        except User.DoesNotExist:
-            pass
+        if username:
+            try:
+                users = User.objects.filter(username=username)
+                for u in users:
+                    try:
+                        if hasattr(u, 'profile') and getattr(u, 'profile') and not u.profile.is_email_verified:
+                            u.delete()
+                    except Exception:
+                        pass
+            except Exception:
+                pass
+                
+        if email:
+            try:
+                users = User.objects.filter(email=email)
+                for u in users:
+                    try:
+                        if hasattr(u, 'profile') and getattr(u, 'profile') and not u.profile.is_email_verified:
+                            u.delete()
+                    except Exception:
+                        pass
+            except Exception:
+                pass
 
         serializer = RegisterSerializer(data=request.data)
         if serializer.is_valid():
