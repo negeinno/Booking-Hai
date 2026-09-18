@@ -10,6 +10,7 @@ import resend
 import os
 from django.utils import timezone
 from datetime import timedelta
+from django.conf import settings
 from .models import EmailVerificationToken, PasswordResetToken, OTPVerification
 from .api_serializers import RegisterSerializer, UserSerializer
 
@@ -42,13 +43,18 @@ class RegisterView(APIView):
             OTPVerification.objects.create(user=user, code=otp_code)
             send_otp_email(user.email, otp_code)
             refresh = RefreshToken.for_user(user)
-            return Response({
+            
+            response_data = {
                 'user': UserSerializer(user).data,
                 'refresh': str(refresh),
                 'access': str(refresh.access_token),
                 'message': 'OTP sent to email.',
                 'requires_verification': True
-            }, status=status.HTTP_201_CREATED)
+            }
+            if getattr(settings, 'DEBUG', False):
+                response_data['debug_otp'] = otp_code
+                
+            return Response(response_data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class VerifyOTPView(APIView):
@@ -74,7 +80,6 @@ class VerifyOTPView(APIView):
                 otp_record.save()
                 return Response({'error': 'Invalid OTP'}, status=status.HTTP_400_BAD_REQUEST)
         except OTPVerification.DoesNotExist:
-            # Maybe already verified
             if request.user.profile.is_email_verified:
                  return Response({'message': 'Email already verified.'})
             return Response({'error': 'No OTP found for this user.'}, status=status.HTTP_400_BAD_REQUEST)
@@ -84,13 +89,12 @@ class ResendOTPView(APIView):
 
     def post(self, request):
         if request.user.profile.is_email_verified:
-            return Response({'error': 'User is already verified.'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'message': 'Email already verified.'})
             
         otp_record, created = OTPVerification.objects.get_or_create(user=request.user)
         
-        # Rate limit to 1 per minute
-        if not created and otp_record.last_sent_at and timezone.now() < otp_record.last_sent_at + timedelta(minutes=1):
-            return Response({'error': 'Please wait before requesting another OTP.'}, status=status.HTTP_429_TOO_MANY_REQUESTS)
+        if not created and otp_record.last_sent_at and (timezone.now() - otp_record.last_sent_at).total_seconds() < 60:
+            return Response({'error': 'Please wait a minute before requesting a new OTP.'}, status=status.HTTP_429_TOO_MANY_REQUESTS)
             
         otp_code = ''.join(random.choices(string.digits, k=6))
         otp_record.code = otp_code
@@ -101,7 +105,11 @@ class ResendOTPView(APIView):
         
         send_otp_email(request.user.email, otp_code)
         
-        return Response({'message': 'OTP resent successfully.'})
+        response_data = {'message': 'New OTP sent to email.'}
+        if getattr(settings, 'DEBUG', False):
+            response_data['debug_otp'] = otp_code
+            
+        return Response(response_data)
 
 class LoginView(APIView):
     permission_classes = [permissions.AllowAny]
@@ -110,23 +118,10 @@ class LoginView(APIView):
         username = request.data.get('username')
         password = request.data.get('password')
         user = authenticate(username=username, password=password)
-        if not user:
-            try:
-                user_obj = User.objects.get(email=username)
-                user = authenticate(username=user_obj.username, password=password)
-            except User.DoesNotExist:
-                pass
-
+        
         if user:
             if not user.profile.is_email_verified:
-                refresh = RefreshToken.for_user(user)
-                return Response({
-                    'error': 'Email not verified',
-                    'requires_verification': True,
-                    'user': UserSerializer(user).data,
-                    'refresh': str(refresh),
-                    'access': str(refresh.access_token),
-                }, status=status.HTTP_403_FORBIDDEN)
+                return Response({'error': 'Email not verified', 'requires_verification': True}, status=status.HTTP_403_FORBIDDEN)
                 
             refresh = RefreshToken.for_user(user)
             return Response({
@@ -134,29 +129,38 @@ class LoginView(APIView):
                 'refresh': str(refresh),
                 'access': str(refresh.access_token),
             })
-        return Response({'error': 'Invalid Credentials'}, status=status.HTTP_401_UNAUTHORIZED)
+        return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
 
 class ForgotPasswordView(APIView):
     permission_classes = [permissions.AllowAny]
+
     def post(self, request):
         email = request.data.get('email')
         try:
             user = User.objects.get(email=email)
             token = PasswordResetToken.objects.create(user=user)
+            # In a real app, send this link via email
+            reset_link = f"{settings.FRONTEND_URL}/reset-password/{token.token}"
+            print(f"Password reset link: {reset_link}") # Replace with email sending
             return Response({'message': 'Password reset link sent to email.'})
         except User.DoesNotExist:
-            return Response({'error': 'User with this email does not exist.'}, status=400)
+            # Return success anyway to prevent email enumeration
+            return Response({'message': 'Password reset link sent to email.'})
 
 class ResetPasswordView(APIView):
     permission_classes = [permissions.AllowAny]
+
     def post(self, request, token):
-        new_password = request.data.get('password')
+        password = request.data.get('password')
         try:
             reset_token = PasswordResetToken.objects.get(token=token)
+            if reset_token.is_expired():
+                return Response({'error': 'Token has expired.'}, status=status.HTTP_400_BAD_REQUEST)
+                
             user = reset_token.user
-            user.set_password(new_password)
+            user.set_password(password)
             user.save()
             reset_token.delete()
-            return Response({'message': 'Password reset successful.'})
+            return Response({'message': 'Password has been reset successfully.'})
         except PasswordResetToken.DoesNotExist:
-            return Response({'error': 'Invalid token'}, status=400)
+            return Response({'error': 'Invalid token.'}, status=status.HTTP_400_BAD_REQUEST)

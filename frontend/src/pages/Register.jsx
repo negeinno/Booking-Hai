@@ -52,7 +52,7 @@ const Register = () => {
             });
             const data = await response.json();
             if (response.ok || response.status === 201) {
-                navigate('/verify-otp', { state: { requiresVerification: true, tokens: data } });
+                if (data.debug_otp) { alert("DEBUG MODE - Your OTP is: " + data.debug_otp); } navigate('/verify-otp', { state: { requiresVerification: true, tokens: data } });
             } else {
                 if (data.error) setError(data.error);
                 else if (data.detail) setError(data.detail);
@@ -199,3 +199,4 @@ const Register = () => {
 };
 
 export default Register;
+
