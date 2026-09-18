@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { API_BASE } from '../config/api';
+
 
 const Register = () => {
     const navigate = useNavigate();
@@ -37,7 +39,7 @@ const Register = () => {
             last_name
         };
 
-        const response = await fetch('/api/auth/register/', {
+        const response = await fetch(API_BASE + '/api/v1/auth/register/', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)

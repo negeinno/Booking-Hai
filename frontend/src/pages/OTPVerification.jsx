@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
+import { API_BASE } from '../config/api';
+
 
 const OTPVerification = () => {
     const [otp, setOtp] = useState(['', '', '', '', '', '']);
@@ -74,7 +76,7 @@ const OTPVerification = () => {
         setError('');
         try {
             const tokenToUse = tokens?.access || localStorage.getItem('access') || '';
-            const res = await fetch('/api/auth/verify-otp/', {
+            const res = await fetch(API_BASE + '/api/v1/auth/verify-otp/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -103,7 +105,7 @@ const OTPVerification = () => {
     const handleResend = async () => {
         try {
             const tokenToUse = tokens?.access || localStorage.getItem('access') || '';
-            const res = await fetch('/api/auth/resend-otp/', {
+            const res = await fetch(API_BASE + '/api/v1/auth/resend-otp/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

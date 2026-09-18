@@ -1,5 +1,7 @@
 
 import React, { createContext, useState, useEffect } from 'react';
+import { API_BASE } from '../config/api';
+
 
 export const AuthContext = createContext();
 
@@ -10,7 +12,7 @@ export const AuthProvider = ({ children }) => {
 
     const loginUser = async (e) => {
         e.preventDefault();
-        const response = await fetch('/api/auth/login/', {
+        const response = await fetch(API_BASE + '/api/v1/auth/login/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
