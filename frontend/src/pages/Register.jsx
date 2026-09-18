@@ -5,7 +5,7 @@ const Register = () => {
     const navigate = useNavigate();
     const [step, setStep] = useState('register'); // 'register' or 'otp'
     const [formData, setFormData] = useState({
-        fullName: '', email: '', password: '', confirmPassword: '', termsAccepted: false
+        username: '', fullName: '', email: '', password: '', confirmPassword: '', termsAccepted: false
     });
     const [otpCode, setOtpCode] = useState('');
     const [token, setToken] = useState(null);
@@ -28,10 +28,9 @@ const Register = () => {
         const nameParts = formData.fullName.trim().split(' ');
         const first_name = nameParts[0] || '';
         const last_name = nameParts.slice(1).join(' ') || '';
-        const username = formData.email.split('@')[0] + Math.floor(Math.random()*1000);
 
         const payload = {
-            username,
+            username: formData.username,
             email: formData.email,
             password: formData.password,
             first_name,
@@ -91,6 +90,17 @@ const Register = () => {
                     {step === 'register' ? (
                         <form className="space-y-4" onSubmit={handleSubmit}>
                             <div>
+                                <label className="block font-bold mb-1">Username</label>
+                                <input 
+                                    name="username"
+                                    type="text" 
+                                    onChange={handleChange}
+                                    className="w-full px-4 py-2 bg-yellow-50 border-[3px] border-black focus:outline-none focus:ring-4 focus:ring-brand-pink/20 brutal-shadow brutal-hover transition-all font-medium"
+                                    placeholder="boss123"
+                                    required
+                                />
+                            </div>
+                            <div>
                                 <label className="block font-bold mb-1">Full Name</label>
                                 <input 
                                     name="fullName"
@@ -145,7 +155,7 @@ const Register = () => {
                                     required
                                 />
                                 <label htmlFor="termsAccepted" className="text-sm font-bold cursor-pointer">
-                                    I accept the Terms and Privacy Policy
+                                    I accept the <Link to="/terms" className="text-brand-pink hover:underline">Terms</Link> and <Link to="/privacy" className="text-brand-pink hover:underline">Privacy Policy</Link>
                                 </label>
                             </div>
 
@@ -153,7 +163,7 @@ const Register = () => {
                                 type="submit" 
                                 className="w-full py-3 bg-black text-white font-black text-lg brutal-shadow hover:-translate-y-1 hover:shadow-lg transition-transform uppercase mt-2"
                             >
-                                Sign Up
+                                Send OTP & Sign Up
                             </button>
                             
                             <div className="relative flex items-center justify-center my-4">
