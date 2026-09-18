@@ -18,14 +18,18 @@ resend.api_key = os.environ.get('RESEND_API_KEY')
 def send_otp_email(email, otp_code):
     try:
         if resend.api_key:
-            resend.Emails.send({
-                "from": "Acme <onboarding@resend.dev>",
+            from_email = os.environ.get('EMAIL_FROM', 'Booking Hai <onboarding@resend.dev>')
+            response = resend.Emails.send({
+                "from": from_email,
                 "to": [email],
-                "subject": "Your Verification Code",
-                "html": f"<p>Your verification code is: <strong>{otp_code}</strong></p>"
+                "subject": "Your Booking Hai Verification Code",
+                "html": f"<h2>Booking Hai</h2><p>Your verification code is: <strong>{otp_code}</strong></p><p>This code will expire in 10 minutes.</p>"
             })
+            print(f"OTP email sent to {email}: {response}")
+        else:
+            print(f"WARNING: RESEND_API_KEY is not set. OTP code for {email} is {otp_code}")
     except Exception as e:
-        print("Failed to send OTP:", e)
+        print(f"Failed to send OTP to {email}:", e)
 
 class RegisterView(APIView):
     permission_classes = [permissions.AllowAny]
