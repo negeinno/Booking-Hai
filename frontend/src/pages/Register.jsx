@@ -44,27 +44,9 @@ const Register = () => {
         });
         if (response.status === 201) {
             const data = await response.json();
-            setToken(data.access);
-            setStep('otp');
+            navigate('/verify-otp', { state: { requiresVerification: true, tokens: data } });
         } else {
             alert('Signup failed');
-        }
-    };
-
-    const handleOtpSubmit = async (e) => {
-        e.preventDefault();
-        const response = await fetch('/api/auth/verify-otp/', {
-            method: 'POST',
-            headers: { 
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify({ otp: otpCode })
-        });
-        if (response.ok) {
-            navigate('/login');
-        } else {
-            alert('Invalid OTP');
         }
     };
 
@@ -84,10 +66,9 @@ const Register = () => {
             <div className="w-full md:w-1/2 bg-white p-8 md:p-16 flex flex-col justify-center items-center">
                 <div className="w-full max-w-md">
                     <h2 className="text-3xl font-black mb-8 uppercase text-center">
-                        {step === 'register' ? 'Register' : 'Verify Email'}
+                        Register
                     </h2>
                     
-                    {step === 'register' ? (
                         <form className="space-y-4" onSubmit={handleSubmit}>
                             <div>
                                 <label className="block font-bold mb-1">Username</label>
@@ -184,38 +165,10 @@ const Register = () => {
                                 Continue with Google
                             </button>
                         </form>
-                    ) : (
-                        <form className="space-y-6" onSubmit={handleOtpSubmit}>
-                            <p className="font-bold text-center mb-4 text-gray-700">
-                                We've sent a 6-digit code to your email.
-                            </p>
-                            <div>
-                                <label className="block font-bold mb-2 text-center">OTP Code</label>
-                                <input 
-                                    name="otp"
-                                    type="text" 
-                                    value={otpCode}
-                                    onChange={(e) => setOtpCode(e.target.value)}
-                                    maxLength="6"
-                                    className="w-full text-center tracking-widest text-2xl px-4 py-3 bg-yellow-50 border-[3px] border-black focus:outline-none focus:ring-4 focus:ring-brand-pink/20 brutal-shadow brutal-hover transition-all font-bold"
-                                    placeholder="123456"
-                                    required
-                                />
-                            </div>
-                            <button 
-                                type="submit" 
-                                className="w-full py-4 bg-black text-white font-black text-xl brutal-shadow hover:-translate-y-1 hover:shadow-lg transition-transform uppercase"
-                            >
-                                Verify OTP
-                            </button>
-                        </form>
-                    )}
                     
-                    {step === 'register' && (
                         <p className="mt-8 text-center font-bold">
                             Already have an account? <Link to="/login" className="text-brand-pink hover:underline">Log In</Link>
                         </p>
-                    )}
                 </div>
             </div>
         </div>

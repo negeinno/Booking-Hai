@@ -1,4 +1,4 @@
-﻿from rest_framework import viewsets
+from rest_framework import viewsets
 from businesses.models import Business
 from services.models import Service
 from appointments.models import Appointment
@@ -30,3 +30,17 @@ class AppointmentViewSet(viewsets.ModelViewSet):
 class BusinessLocationViewSet(viewsets.ModelViewSet):
     queryset = BusinessLocation.objects.all()
     serializer_class = BusinessLocationSerializer
+
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from django.db import connection
+from rest_framework.permissions import AllowAny
+
+class HealthCheckView(APIView):
+    permission_classes = [AllowAny]
+    def get(self, request):
+        try:
+            connection.ensure_connection()
+            return Response({'status': 'ok', 'database': 'connected'}, status=200)
+        except Exception as e:
+            return Response({'status': 'error', 'database': 'disconnected', 'error_detail': str(e)}, status=503)

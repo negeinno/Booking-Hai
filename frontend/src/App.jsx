@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
 import Login from './pages/Login';
@@ -8,6 +8,8 @@ import Discover from './pages/Discover';
 import Business from './pages/Business';
 import { AuthProvider } from './context/AuthContext';
 
+import OTPVerification from './pages/OTPVerification';
+
 function App() {
   return (
     <AuthProvider>
@@ -16,6 +18,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/verify-otp" element={<OTPVerification />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/discover" element={<Discover />} />
           <Route path="/business" element={<Business />} />

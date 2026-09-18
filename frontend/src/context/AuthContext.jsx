@@ -24,8 +24,11 @@ export const AuthProvider = ({ children }) => {
             setUser(data.user);
             localStorage.setItem('authTokens', JSON.stringify(data));
             window.location.href = '/dashboard';
+        } else if (response.status === 403 && data.requires_verification) {
+            window.location.href = '/verify-otp?tokens=' + encodeURIComponent(JSON.stringify(data));
+            // Actually better to pass through state, but window.location can't do that easily without react-router's navigate
         } else {
-            alert('Something went wrong!');
+            alert(data.error || 'Something went wrong!');
         }
     }
 
