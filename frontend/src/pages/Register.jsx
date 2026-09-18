@@ -11,6 +11,8 @@ const Register = () => {
     });
     const [otpCode, setOtpCode] = useState('');
     const [token, setToken] = useState(null);
+    const [error, setError] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleChange = (e) => {
         const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
@@ -19,14 +21,17 @@ const Register = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setError('');
         if (formData.password !== formData.confirmPassword) {
-            alert('Passwords do not match');
+            setError('Passwords do not match');
             return;
         }
         if (!formData.termsAccepted) {
-            alert('Please accept the Terms and Privacy Policy');
+            setError('Please accept the Terms and Privacy Policy');
             return;
         }
+        
+        setIsLoading(true);
         const nameParts = formData.fullName.trim().split(' ');
         const first_name = nameParts[0] || '';
         const last_name = nameParts.slice(1).join(' ') || '';
@@ -39,16 +44,22 @@ const Register = () => {
             last_name
         };
 
-        const response = await fetch(API_BASE + '/api/v1/auth/register/', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-        });
-        if (response.status === 201) {
+        try {
+            const response = await fetch(API_BASE + '/api/v1/auth/register/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
             const data = await response.json();
-            navigate('/verify-otp', { state: { requiresVerification: true, tokens: data } });
-        } else {
-            alert('Signup failed');
+            if (response.ok || response.status === 201) {
+                navigate('/verify-otp', { state: { requiresVerification: true, tokens: data } });
+            } else {
+                setError(data.error || data.detail || JSON.stringify(data));
+            }
+        } catch (err) {
+            setError('An error occurred during signup.');
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -134,19 +145,20 @@ const Register = () => {
                                     name="termsAccepted"
                                     id="termsAccepted"
                                     onChange={handleChange}
-                                    className="w-5 h-5 border-[2px] border-black text-brand-pink focus:ring-brand-pink/20"
-                                    required
+                                    className="w-5 h-5 border-[2px] border-black text-brand-pink focus:ring-brand-pink/20 cursor-pointer"
                                 />
-                                <label htmlFor="termsAccepted" className="text-sm font-bold cursor-pointer">
+                                <span className="text-sm font-bold">
                                     I accept the <Link to="/terms" className="text-brand-pink hover:underline">Terms</Link> and <Link to="/privacy" className="text-brand-pink hover:underline">Privacy Policy</Link>
-                                </label>
+                                </span>
                             </div>
 
+                            {error && <p className="text-red-600 font-bold text-center">{error}</p>}
                             <button 
                                 type="submit" 
-                                className="w-full py-3 bg-black text-white font-black text-lg brutal-shadow hover:-translate-y-1 hover:shadow-lg transition-transform uppercase mt-2"
+                                disabled={isLoading}
+                                className="w-full py-3 bg-black text-white font-black text-lg brutal-shadow hover:-translate-y-1 hover:shadow-lg transition-transform uppercase mt-2 disabled:opacity-50"
                             >
-                                Send OTP & Sign Up
+                                {isLoading ? 'Sending OTP...' : 'Send OTP & Sign Up'}
                             </button>
                             
                             <div className="relative flex items-center justify-center my-4">
