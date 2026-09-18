@@ -245,5 +245,6 @@ if DEBUG:
 else:
     CORS_ALLOWED_ORIGINS = [
         'https://booking-hai.vercel.app',
+        'https://bookinghai.vercel.app',
     ]
 
