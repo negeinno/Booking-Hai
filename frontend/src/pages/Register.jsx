@@ -54,7 +54,19 @@ const Register = () => {
             if (response.ok || response.status === 201) {
                 navigate('/verify-otp', { state: { requiresVerification: true, tokens: data } });
             } else {
-                setError(data.error || data.detail || JSON.stringify(data));
+                if (data.error) setError(data.error);
+                else if (data.detail) setError(data.detail);
+                else if (typeof data === 'object') {
+                    // Extract the first error message from the object
+                    const firstKey = Object.keys(data)[0];
+                    if (Array.isArray(data[firstKey])) {
+                        setError(data[firstKey][0]);
+                    } else {
+                        setError(data[firstKey]);
+                    }
+                } else {
+                    setError('Registration failed. Please try again.');
+                }
             }
         } catch (err) {
             setError('An error occurred during signup.');
@@ -72,7 +84,7 @@ const Register = () => {
                     Start <br /> Your Journey.
                 </h1>
                 <p className="text-xl font-bold max-w-md">Create an account to manage your bookings, customize your page, and grow your dhanda.</p>
-                <div className="mt-12 text-6xl transform rotate-12">ðŸš€</div>
+                <div className="mt-12 text-6xl transform rotate-12">??</div>
             </div>
             
             {/* Right Side - Form */}
@@ -82,63 +94,59 @@ const Register = () => {
                         Register
                     </h2>
                     
-                        <form className="space-y-4" onSubmit={handleSubmit}>
-                            <div>
-                                <label className="block font-bold mb-1">Username</label>
-                                <input 
-                                    name="username"
-                                    type="text" 
-                                    onChange={handleChange}
-                                    className="w-full px-4 py-2 bg-yellow-50 border-[3px] border-black focus:outline-none focus:ring-4 focus:ring-brand-pink/20 brutal-shadow brutal-hover transition-all font-medium"
-                                    placeholder="boss123"
-                                    required
-                                />
-                            </div>
-                            <div>
-                                <label className="block font-bold mb-1">Full Name</label>
-                                <input 
-                                    name="fullName"
-                                    type="text" 
-                                    onChange={handleChange}
-                                    className="w-full px-4 py-2 bg-yellow-50 border-[3px] border-black focus:outline-none focus:ring-4 focus:ring-brand-pink/20 brutal-shadow brutal-hover transition-all font-medium"
-                                    placeholder="Anmol Kumar"
-                                    required
-                                />
-                            </div>
-                            <div>
-                                <label className="block font-bold mb-1">Email Address</label>
-                                <input 
-                                    name="email"
-                                    type="email" 
-                                    onChange={handleChange}
-                                    className="w-full px-4 py-2 bg-yellow-50 border-[3px] border-black focus:outline-none focus:ring-4 focus:ring-brand-pink/20 brutal-shadow brutal-hover transition-all font-medium"
-                                    placeholder="boss@bookinghai.com"
-                                    required
-                                />
-                            </div>
-                            <div>
-                                <label className="block font-bold mb-1">Password</label>
-                                <input 
-                                    name="password"
-                                    type="password" 
-                                    onChange={handleChange}
-                                    className="w-full px-4 py-2 bg-yellow-50 border-[3px] border-black focus:outline-none focus:ring-4 focus:ring-brand-pink/20 brutal-shadow brutal-hover transition-all font-medium"
-                                    placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"
-                                    required
-                                />
-                            </div>
-                            <div>
-                                <label className="block font-bold mb-1">Confirm Password</label>
-                                <input 
-                                    name="confirmPassword"
-                                    type="password" 
-                                    onChange={handleChange}
-                                    className="w-full px-4 py-2 bg-yellow-50 border-[3px] border-black focus:outline-none focus:ring-4 focus:ring-brand-pink/20 brutal-shadow brutal-hover transition-all font-medium"
-                                    placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"
-                                    required
-                                />
-                            </div>
-                            
+                    <form className="space-y-4" onSubmit={handleSubmit}>
+                        <div>
+                            <label className="block font-bold mb-2">Username</label>
+                            <input 
+                                type="text" 
+                                name="username"
+                                onChange={handleChange}
+                                className="w-full px-4 py-3 bg-yellow-50 border-[3px] border-black focus:outline-none focus:ring-4 focus:ring-brand-pink/20 brutal-shadow brutal-hover transition-all font-medium"
+                                placeholder="boss"
+                            />
+                        </div>
+                        <div>
+                            <label className="block font-bold mb-2">Full Name</label>
+                            <input 
+                                type="text" 
+                                name="fullName"
+                                onChange={handleChange}
+                                className="w-full px-4 py-3 bg-yellow-50 border-[3px] border-black focus:outline-none focus:ring-4 focus:ring-brand-pink/20 brutal-shadow brutal-hover transition-all font-medium"
+                                placeholder="Anmol Kumar"
+                            />
+                        </div>
+                        <div>
+                            <label className="block font-bold mb-2">Email Address</label>
+                            <input 
+                                type="email" 
+                                name="email"
+                                onChange={handleChange}
+                                className="w-full px-4 py-3 bg-yellow-50 border-[3px] border-black focus:outline-none focus:ring-4 focus:ring-brand-pink/20 brutal-shadow brutal-hover transition-all font-medium"
+                                placeholder="anmol@example.com"
+                            />
+                        </div>
+                        <div>
+                            <label className="block font-bold mb-2">Password</label>
+                            <input 
+                                type="password" 
+                                name="password"
+                                onChange={handleChange}
+                                className="w-full px-4 py-3 bg-yellow-50 border-[3px] border-black focus:outline-none focus:ring-4 focus:ring-brand-pink/20 brutal-shadow brutal-hover transition-all font-medium"
+                                placeholder="••••••••"
+                            />
+                        </div>
+                        <div>
+                            <label className="block font-bold mb-2">Confirm Password</label>
+                            <input 
+                                type="password" 
+                                name="confirmPassword"
+                                onChange={handleChange}
+                                className="w-full px-4 py-3 bg-yellow-50 border-[3px] border-black focus:outline-none focus:ring-4 focus:ring-brand-pink/20 brutal-shadow brutal-hover transition-all font-medium"
+                                placeholder="••••••••"
+                            />
+                        </div>
+                        
+                        <div className="flex flex-col space-y-4">
                             <div className="flex items-center space-x-2 pt-2">
                                 <input 
                                     type="checkbox" 
@@ -178,14 +186,16 @@ const Register = () => {
                                 </svg>
                                 Continue with Google
                             </button>
-                        </form>
+                        </div>
+                    </form>
                     
-                        <p className="mt-8 text-center font-bold">
-                            Already have an account? <Link to="/login" className="text-brand-pink hover:underline">Log In</Link>
-                        </p>
+                    <p className="mt-8 text-center font-bold">
+                        Already have an account? <Link to="/login" className="text-brand-pink hover:underline">Log in</Link>
+                    </p>
                 </div>
             </div>
         </div>
     );
 };
+
 export default Register;
