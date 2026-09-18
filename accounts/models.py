@@ -62,6 +62,11 @@ class EmailVerificationToken(models.Model):
     token = models.UUIDField(default=uuid.uuid4, editable=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
+class OTPVerification(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='otp_verification')
+    code = models.CharField(max_length=6)
+    created_at = models.DateTimeField(auto_now_add=True)
+
 class PasswordResetToken(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='password_reset_tokens')
     token = models.UUIDField(default=uuid.uuid4, editable=False)

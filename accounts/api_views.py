@@ -1,11 +1,17 @@
-﻿from rest_framework.views import APIView
+from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, permissions
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from rest_framework_simplejwt.tokens import RefreshToken
-from .models import EmailVerificationToken, PasswordResetToken
+import random
+import string
+import resend
+import os
+from .models import EmailVerificationToken, PasswordResetToken, OTPVerification
 from .api_serializers import RegisterSerializer, UserSerializer
+
+resend.api_key = os.environ.get('RESEND_API_KEY')
 
 class RegisterView(APIView):
     permission_classes = [permissions.AllowAny]
@@ -14,15 +20,50 @@ class RegisterView(APIView):
         serializer = RegisterSerializer(data=request.data)
         if serializer.is_valid():
             user = serializer.save()
-            token = EmailVerificationToken.objects.create(user=user)
+            # token = EmailVerificationToken.objects.create(user=user)
+            
+            # Generate 6-digit OTP
+            otp_code = ''.join(random.choices(string.digits, k=6))
+            OTPVerification.objects.create(user=user, code=otp_code)
+
             # send email logic with Resend
+            try:
+                if resend.api_key:
+                    resend.Emails.send({
+                        "from": "Acme <onboarding@resend.dev>",
+                        "to": [user.email],
+                        "subject": "Your Verification Code",
+                        "html": f"<p>Your verification code is: <strong>{otp_code}</strong></p>"
+                    })
+            except Exception as e:
+                print("Failed to send OTP:", e)
+                
             refresh = RefreshToken.for_user(user)
             return Response({
                 'user': UserSerializer(user).data,
                 'refresh': str(refresh),
                 'access': str(refresh.access_token),
+                'message': 'OTP sent to email.'
             }, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class VerifyOTPView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request):
+        otp_code = request.data.get('otp')
+        try:
+            otp_record = OTPVerification.objects.get(user=request.user)
+            if otp_record.code == otp_code:
+                profile = request.user.profile
+                profile.is_email_verified = True
+                profile.save()
+                otp_record.delete()
+                return Response({'message': 'Email verified successfully.'})
+            else:
+                return Response({'error': 'Invalid OTP'}, status=status.HTTP_400_BAD_REQUEST)
+        except OTPVerification.DoesNotExist:
+            return Response({'error': 'No OTP found for this user.'}, status=status.HTTP_400_BAD_REQUEST)
 
 class LoginView(APIView):
     permission_classes = [permissions.AllowAny]
